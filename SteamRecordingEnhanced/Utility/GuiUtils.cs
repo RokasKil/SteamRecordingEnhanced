@@ -5,7 +5,7 @@ using SteamRecordingEnhanced.Steam;
 
 namespace SteamRecordingEnhanced.Utility;
 
-public class GuiUtils
+public static class GuiUtils
 {
     public static bool Combo<T>(string title, ref T value, ImGuiComboFlags flags = ImGuiComboFlags.None) where T : Enum
     {

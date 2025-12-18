@@ -16,8 +16,11 @@ public class Configuration : IPluginConfiguration
     public string DutyCompleteIcon = "steam_chest";
     public string PlayerDiedIcon = "steam_death";
     public string PartyMemberDiedIcon = "steam_death";
+    public string PvpKillIcon = "steam_combat";
 
     public bool HighlightCombat = true;
+
+    public bool SessionsOnlyInInstance = false;
 
     public int Version { get; set; } = 0;
 

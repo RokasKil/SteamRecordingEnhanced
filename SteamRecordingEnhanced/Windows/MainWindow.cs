@@ -1,12 +1,10 @@
 ﻿using System;
 using System.Numerics;
 using Dalamud.Bindings.ImGui;
-using Dalamud.Interface.Utility;
 using Dalamud.Interface.Utility.Raii;
 using Dalamud.Interface.Windowing;
+using FFXIVClientStructs.FFXIV.Client.Game;
 using FFXIVClientStructs.FFXIV.Client.System.Framework;
-using Lumina.Excel.Sheets;
-using SteamRecordingEnhanced.PluginServices;
 using SteamRecordingEnhanced.Steam;
 using SteamRecordingEnhanced.Utility;
 
@@ -30,6 +28,7 @@ public class MainWindow : Window
         unsafe
         {
             ImGui.TextUnformatted($"Steam handle by framework {Framework.Instance()->SteamApiLibraryHandle:X}");
+            ImGui.TextUnformatted($"CurrentContentFinderConditionId {GameMain.Instance()->CurrentContentFinderConditionId:X}");
         }
 
         if (!Services.SteamService.SteamLoaded)
@@ -54,10 +53,17 @@ public class MainWindow : Window
             ImGui.Separator();
             DrawGamePhaseActions(timeline);
             ImGui.Separator();
+            if (ImGui.Button("Test event spreading logic"))
+            {
+                for (uint i = 0; i < 5; i++)
+                {
+                    Services.TimelineService.AddEvent(i.ToString(), "", $"steam_{i}", i, -5);
+                }
+            }
         }
     }
 
-    private string tooltipDescription;
+    private string tooltipDescription = "tooltipDescription";
     private float timeDelta;
 
     private unsafe void DrawTimelineTooltipActions(SteamTimeline* timeline)

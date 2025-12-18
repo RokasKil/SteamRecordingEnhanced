@@ -12,6 +12,7 @@ public class ConfigWindow : Window
     private readonly ITab[] tabs =
     {
         new SettingsTab(),
+        new StatusTab(),
         new AboutTab()
     };
 

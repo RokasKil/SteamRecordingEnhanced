@@ -14,8 +14,8 @@ public class Services
     private static bool Disposed;
     [PluginService]
     public static IClientState ClientState { get; set; } = null!;
-    [PluginService]
-    public static ISigScanner SigScanner { get; set; } = null!;
+    // [PluginService]
+    // public static ISigScanner SigScanner { get; set; } = null!;
     [PluginService]
     public static IDataManager DataManager { get; set; } = null!;
     [PluginService]
@@ -54,6 +54,8 @@ public class Services
     public static Configuration Configuration { get; set; } = null!;
     public static SteamService SteamService { get; set; } = null!;
     public static EventService EventService { get; set; } = null!;
+    public static TimelineService TimelineService { get; set; } = null!;
+    public static KillService KillService { get; set; } = null!;
     public static Plugin Plugin { get; set; } = null!;
 
     public static void ConstructServices(IDalamudPluginInterface pluginInterface, Plugin plugin)
@@ -63,8 +65,10 @@ public class Services
         PluginInterface = pluginInterface;
         try
         {
-            ServiceList.Add(SteamService = new SteamService());
-            ServiceList.Add(EventService = new EventService());
+            ServiceList.Add(SteamService = new());
+            ServiceList.Add(EventService = new());
+            ServiceList.Add(TimelineService = new());
+            ServiceList.Add(KillService = new());
         }
         catch
         {

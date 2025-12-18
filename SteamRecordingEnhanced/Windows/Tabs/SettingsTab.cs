@@ -1,6 +1,4 @@
-using System;
 using Dalamud.Bindings.ImGui;
-using Dalamud.Interface.Components;
 using Dalamud.Interface.Utility.Raii;
 using SteamRecordingEnhanced.Utility;
 
@@ -22,9 +20,39 @@ internal class SettingsTab : ITab
         SettingsSteamIconSelect($"Duty complete", ref Services.Configuration.DutyCompleteIcon);
         SettingsSteamIconSelect($"Player died", ref Services.Configuration.PlayerDiedIcon);
         SettingsSteamIconSelect($"Party member died", ref Services.Configuration.PartyMemberDiedIcon);
+        SettingsSteamIconSelect($"PVP kill", ref Services.Configuration.PvpKillIcon);
+
         ImGui.Separator();
         ImGui.TextUnformatted("Highlighted events");
         SettingCheckbox("Combat", ref Services.Configuration.HighlightCombat);
+
+        ImGui.Separator();
+        ImGui.TextUnformatted("Sessions");
+        SettingCheckbox("Start sessions only in instances", ref Services.Configuration.SessionsOnlyInInstance);
+        if (ImGui.CollapsingHeader("What are sessions?"))
+        {
+            using var indent = ImRaii.PushIndent();
+            using var textWrapPos = ImRaii.TextWrapPos(ImGui.GetFontSize() * 24);
+            ImGui.TextWrapped("Steam allows games to split the recording into different sections with their" +
+                              " own label and display them in the Sessions View." +
+                              " By default this plugin will start a new session each time you load into a new zone" +
+                              " which you can configure to only start a new session when you enter an instance." +
+                              " Each session will be labeled with and can be filtered by the character and zone name." +
+                              " You can find the Sessions View by going to Recordings & Screenshots" +
+                              " and clicking on the 3 vertical lines icon in the top left of the window or click" +
+                              " the button below to open Session View in steam overlay.");
+            using var disabled = ImRaii.Disabled(Services.SteamService.IsOverlayEnabled() != true);
+            if (ImGui.Button("Open Session View"))
+            {
+                Services.TimelineService.OpenOverlayToGamePhase();
+            }
+
+            if (ImGui.IsItemHovered(ImGuiHoveredFlags.AllowWhenDisabled) && disabled.Success)
+            {
+                using (ImRaii.Enabled())
+                    ImGui.SetTooltip("Steam Overlay must be enabled!");
+            }
+        }
     }
 
     private bool SettingCheckbox(string label, ref bool value, bool save = true)

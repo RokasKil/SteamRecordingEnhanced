@@ -23,13 +23,13 @@ public class SteamService : AbstractService
     [DllImport("kernel32.dll", SetLastError = true)]
     private static extern IntPtr GetModuleHandle(string moduleName);
 
-    private IntPtr steamHandle;
-
     public GetHSteamUserDelegate? GetHSteamUser;
     public SteamApiInitDelegate? SteamApiInit;
     public FindOrCreateInterfaceDelegate? FindOrCreateInterface;
 
     public bool SteamLoaded { get; private set; } = false;
+
+    private IntPtr steamHandle;
 
     public override void Init()
     {
@@ -49,7 +49,7 @@ public class SteamService : AbstractService
             FindOrCreateInterface = Marshal.GetDelegateForFunctionPointer<FindOrCreateInterfaceDelegate>(NativeLibrary.GetExport(steamHandle, "SteamInternal_FindOrCreateUserInterface"));
 
             SteamLoaded = SteamApiInit() == 1;
-            Services.Log.Debug($"Steam api init {SteamLoaded}");
+            Services.Log.Information($"Steam api init {SteamLoaded}");
         }
         catch (Exception ex)
         {
@@ -63,19 +63,58 @@ public class SteamService : AbstractService
         }
     }
 
-    public unsafe SteamTimeline* GetSteamTimeline()
+    private IntPtr GetInterface(string interfaceVersion)
     {
         if (!SteamLoaded)
         {
-            return null;
+            return IntPtr.Zero;
         }
 
         uint hSteamUser = GetHSteamUser!();
         if (hSteamUser == 0)
         {
-            return null;
+            Services.Log.Error("Failed to get HSteamUser");
+            return IntPtr.Zero;
         }
 
-        return (SteamTimeline*)FindOrCreateInterface!(hSteamUser, SteamTimeline.INTERFACE_VERSION);
+        var result = FindOrCreateInterface!(hSteamUser, interfaceVersion);
+        if (result == IntPtr.Zero)
+        {
+            Services.Log.Error($"Failed to get instance {interfaceVersion}");
+        }
+
+        return result;
+    }
+
+    public unsafe SteamTimeline* GetSteamTimeline()
+    {
+        return (SteamTimeline*)GetInterface(SteamTimeline.INTERFACE_VERSION);
+    }
+
+    public unsafe SteamUtils* GetSteamUtils()
+    {
+        return (SteamUtils*)GetInterface(SteamUtils.INTERFACE_VERSION);
+    }
+
+    public unsafe bool? IsOverlayEnabled()
+    {
+        var steamUtils = GetSteamUtils();
+        if (steamUtils != null)
+        {
+            return steamUtils->IsOverlayEnabled();
+        }
+
+        return null;
+    }
+
+    public unsafe uint? GetAppId()
+    {
+        var steamUtils = GetSteamUtils();
+        if (steamUtils != null)
+        {
+            return steamUtils->GetAppId();
+        }
+
+        return null;
     }
 }
