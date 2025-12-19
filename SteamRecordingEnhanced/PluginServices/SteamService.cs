@@ -1,8 +1,7 @@
 ﻿using System;
-using System.Diagnostics;
 using System.IO;
 using System.Runtime.InteropServices;
-using SteamRecordingEnhanced.Interop;
+using Dalamud.Interface.ImGuiNotification;
 using SteamRecordingEnhanced.Steam;
 using SteamRecordingEnhanced.Utility;
 
@@ -60,6 +59,18 @@ public class SteamService : AbstractService
             }
 
             throw;
+        }
+
+        if (!SteamLoaded)
+        {
+            Services.NotificationManager.AddNotification(new()
+            {
+                Title = "Steam API Error",
+                Content = "Failed to load steam, check configuration for help.",
+                Minimized = false,
+                Type = NotificationType.Error,
+                InitialDuration = TimeSpan.MaxValue
+            });
         }
     }
 

@@ -2,6 +2,7 @@
 
 public static class EventPriorities
 {
+    public const uint USER_EVENT_PRIORITY = 1000;
     public const uint ACHIEVEMENT_UNLOCKED_PRIORITY = 11;
     public const uint PVP_KILL_PRIORITY = 10;
     public const uint QUEST_COMPLETE_PRIORITY = 9;

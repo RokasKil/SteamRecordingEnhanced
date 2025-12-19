@@ -1,52 +1,100 @@
-﻿namespace SteamRecordingEnhanced.Steam;
+﻿using SteamRecordingEnhanced.Utility;
+
+namespace SteamRecordingEnhanced.Steam;
 
 public enum SteamIcon
 {
+    Number, // special case
+    [IconUrl("https://steamcdn-a.akamaihd.net/steamcommunity/public/images/steamworks_docs/english/achievment_1.png")]
     Achievement,
+    [IconUrl("https://steamcdn-a.akamaihd.net/steamcommunity/public/images/steamworks_docs/english/attack_1.png")]
     Attack,
+    [IconUrl("https://steamcdn-a.akamaihd.net/steamcommunity/public/images/steamworks_docs/english/bolt_1.png")]
     Bolt,
+    [IconUrl("https://steamcdn-a.akamaihd.net/steamcommunity/public/images/steamworks_docs/english/bookmark_1.png")]
     Bookmark,
+    [IconUrl("https://steamcdn-a.akamaihd.net/steamcommunity/public/images/steamworks_docs/english/bug.png")]
     Bug,
+    [IconUrl("https://steamcdn-a.akamaihd.net/steamcommunity/public/images/steamworks_docs/english/cart.png")]
     Cart,
+    [IconUrl("https://steamcdn-a.akamaihd.net/steamcommunity/public/images/steamworks_docs/english/caution.png")]
     Caution,
+    [IconUrl("https://steamcdn-a.akamaihd.net/steamcommunity/public/images/steamworks_docs/english/chat.png")]
     Chat,
+    [IconUrl("https://steamcdn-a.akamaihd.net/steamcommunity/public/images/steamworks_docs/english/checkmark.png")]
     Checkmark,
+    [IconUrl("https://steamcdn-a.akamaihd.net/steamcommunity/public/images/steamworks_docs/english/chest.png")]
     Chest,
+    [IconUrl("https://steamcdn-a.akamaihd.net/steamcommunity/public/images/steamworks_docs/english/circle.png")]
     Circle,
+    [IconUrl("https://steamcdn-a.akamaihd.net/steamcommunity/public/images/steamworks_docs/english/combat.png")]
     Combat,
+    [IconUrl("https://steamcdn-a.akamaihd.net/steamcommunity/public/images/steamworks_docs/english/completed.png")]
     Completed,
+    [IconUrl("https://steamcdn-a.akamaihd.net/steamcommunity/public/images/steamworks_docs/english/crown.png")]
     Crown,
+    [IconUrl("https://steamcdn-a.akamaihd.net/steamcommunity/public/images/steamworks_docs/english/death.png")]
     Death,
+    [IconUrl("https://steamcdn-a.akamaihd.net/steamcommunity/public/images/steamworks_docs/english/defend.png")]
     Defend,
+    [IconUrl("https://steamcdn-a.akamaihd.net/steamcommunity/public/images/steamworks_docs/english/diamond.png")]
     Diamond,
+    [IconUrl("https://steamcdn-a.akamaihd.net/steamcommunity/public/images/steamworks_docs/english/edit.png")]
     Edit,
+    [IconUrl("https://steamcdn-a.akamaihd.net/steamcommunity/public/images/steamworks_docs/english/effect.png")]
     Effect,
+    [IconUrl("https://steamcdn-a.akamaihd.net/steamcommunity/public/images/steamworks_docs/english/explosion.png")]
     Explosion,
+    [IconUrl("https://steamcdn-a.akamaihd.net/steamcommunity/public/images/steamworks_docs/english/fix.png")]
     Fix,
+    [IconUrl("https://steamcdn-a.akamaihd.net/steamcommunity/public/images/steamworks_docs/english/flag.png")]
     Flag,
+    [IconUrl("https://steamcdn-a.akamaihd.net/steamcommunity/public/images/steamworks_docs/english/gem.png")]
     Gem,
+    [IconUrl("https://steamcdn-a.akamaihd.net/steamcommunity/public/images/steamworks_docs/english/group.png")]
     Group,
-    Number, // Special case
+    [IconUrl("https://steamcdn-a.akamaihd.net/steamcommunity/public/images/steamworks_docs/english/heart.png")]
     Heart,
+    [IconUrl("https://steamcdn-a.akamaihd.net/steamcommunity/public/images/steamworks_docs/english/info.png")]
     Info,
+    [IconUrl("https://steamcdn-a.akamaihd.net/steamcommunity/public/images/steamworks_docs/english/invalid.png")]
     Invalid,
+    [IconUrl("https://steamcdn-a.akamaihd.net/steamcommunity/public/images/steamworks_docs/english/marker_2.png")]
     Marker,
+    [IconUrl("https://steamcdn-a.akamaihd.net/steamcommunity/public/images/steamworks_docs/english/minus.png")]
     Minus,
+    [IconUrl("https://steamcdn-a.akamaihd.net/steamcommunity/public/images/steamworks_docs/english/pair.png")]
     Pair,
+    [IconUrl("https://steamcdn-a.akamaihd.net/steamcommunity/public/images/steamworks_docs/english/person.png")]
     Person,
+    [IconUrl("https://steamcdn-a.akamaihd.net/steamcommunity/public/images/steamworks_docs/english/plus.png")]
     Plus,
+    [IconUrl("https://steamcdn-a.akamaihd.net/steamcommunity/public/images/steamworks_docs/english/purchase.png")]
     Purchase,
+    [IconUrl("https://steamcdn-a.akamaihd.net/steamcommunity/public/images/steamworks_docs/english/question.png")]
     Question,
+    [IconUrl("https://steamcdn-a.akamaihd.net/steamcommunity/public/images/steamworks_docs/english/ribbon.png")]
     Ribbon,
+    [IconUrl("https://steamcdn-a.akamaihd.net/steamcommunity/public/images/steamworks_docs/english/screenshot.png")]
     Screenshot,
+    [IconUrl("https://steamcdn-a.akamaihd.net/steamcommunity/public/images/steamworks_docs/english/scroll.png")]
     Scroll,
+    [IconUrl("https://steamcdn-a.akamaihd.net/steamcommunity/public/images/steamworks_docs/english/square.png")]
     Square,
+    [IconUrl("https://steamcdn-a.akamaihd.net/steamcommunity/public/images/steamworks_docs/english/star.png")]
     Star,
+    [IconUrl("https://steamcdn-a.akamaihd.net/steamcommunity/public/images/steamworks_docs/english/starburst.png")]
     Starburst,
+    [IconUrl("https://steamcdn-a.akamaihd.net/steamcommunity/public/images/steamworks_docs/english/timer.png")]
     Timer,
+    [IconUrl("https://steamcdn-a.akamaihd.net/steamcommunity/public/images/steamworks_docs/english/transfer.png")]
     Transfer,
+    [IconUrl("https://steamcdn-a.akamaihd.net/steamcommunity/public/images/steamworks_docs/english/triangle.png")]
     Triangle,
-    //Trophy, // Docs say this should be a throphy icon but actually it's identical to Achievment
+    // [IconUrl("https://steamcdn-a.akamaihd.net/steamcommunity/public/images/steamworks_docs/english/trophy.png")]
+    // Trophy, // Docs say this should be a throphy icon but actually it's identical to Achievment
+    [IconUrl("https://steamcdn-a.akamaihd.net/steamcommunity/public/images/steamworks_docs/english/view.png")]
     View,
+    [IconUrl("https://steamcdn-a.akamaihd.net/steamcommunity/public/images/steamworks_docs/english/x.png")]
     X
 }

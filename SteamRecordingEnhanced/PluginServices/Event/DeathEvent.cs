@@ -1,7 +1,6 @@
 ﻿using System.Linq;
 using Dalamud.Hooking;
 using FFXIVClientStructs.FFXIV.Client.Game.Character;
-using Lumina.Excel.Sheets;
 using SteamRecordingEnhanced.Utility;
 
 namespace SteamRecordingEnhanced.PluginServices.Event;
@@ -39,12 +38,6 @@ public class DeathEvent : AbstractEvent
 
     private unsafe string MakeDescriptionString(Character* character)
     {
-        string job = $"UNKNOWN_JOB_{character->ClassJob}";
-        if (Services.DataManager.GetExcelSheet<ClassJob>().TryGetRow(character->ClassJob, out var classJobRow))
-        {
-            job = classJobRow.Abbreviation.ToString();
-        }
-
-        return $"{character->NameString} ({job}) has died!";
+        return $"{character->NameString} ({Utils.GetJobAbbreviation(character->ClassJob)}) has died!";
     }
 }

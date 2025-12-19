@@ -1,5 +1,8 @@
 ﻿using System;
+using System.Numerics;
 using Dalamud.Bindings.ImGui;
+using Dalamud.Interface.ManagedFontAtlas;
+using Dalamud.Interface.Textures.TextureWraps;
 using Dalamud.Interface.Utility.Raii;
 using SteamRecordingEnhanced.Steam;
 
@@ -7,6 +10,8 @@ namespace SteamRecordingEnhanced.Utility;
 
 public static class GuiUtils
 {
+    public static float IconRatio => ImGui.GetFontSize() / 17.0f;
+
     public static bool Combo<T>(string title, ref T value, ImGuiComboFlags flags = ImGuiComboFlags.None) where T : Enum
     {
         using var id = ImRaii.PushId(title);
@@ -26,6 +31,7 @@ public static class GuiUtils
         return false;
     }
 
+    // ImGui alchemy ahead
     public static bool SteamIconSelect(string title, ref string value)
     {
         using var id = ImRaii.PushId(title);
@@ -51,9 +57,21 @@ public static class GuiUtils
             number = 1;
         }
 
-        using (ImRaii.ItemWidth(ImGui.GetFontSize() * 8))
+        IDalamudTextureWrap? selectedIcon = null;
+        if (Enum.TryParse(displayValue, out SteamIcon icon))
         {
-            using var combo = ImRaii.Combo("##combo", displayValue);
+            selectedIcon = GetIconTextureWrap(icon);
+        }
+
+        var preComboPos = ImGui.GetCursorPos();
+        using (ImRaii.ItemWidth(ImGui.CalcTextSize("Number").X + ImGui.GetStyle().FramePadding.X * 2 + ImGui.GetFrameHeight()))
+        {
+            using var combo = ImRaii.Combo("##combo", selectedIcon != null ? "" : displayValue);
+            if (selectedIcon != null && ImGui.IsItemHovered())
+            {
+                ImGui.SetTooltip(displayValue);
+            }
+
             if (combo)
             {
                 if (ImGui.Selectable("None", displayValue == "None"))
@@ -64,15 +82,33 @@ public static class GuiUtils
 
                 foreach (SteamIcon enumValue in Enum.GetValues(typeof(SteamIcon)))
                 {
-                    if (ImGui.Selectable(enumValue.ToString(), enumValue.ToString() == displayValue))
-                    {
-                        value = enumValue == SteamIcon.Number ? $"steam_{number}" : $"steam_{enumValue.ToString().ToLower()}";
+                    var iconName = $"steam_{enumValue.ToString().ToLower()}";
+                    using var buttonId = ImRaii.PushId(iconName);
+                    IDalamudTextureWrap? iconImage = GetIconTextureWrap(enumValue);
 
-                        changed = true;
+                    var cursorPos = ImGui.GetCursorPos();
+                    using (PushFont(Services.IconService.IconFont, iconImage != null))
+                        if (ImGui.Selectable(iconImage == null ? enumValue.ToString() : "", enumValue.ToString() == displayValue))
+                        {
+                            value = enumValue == SteamIcon.Number ? $"steam_{number}" : iconName;
+
+                            changed = true;
+                        }
+
+                    if (iconImage != null)
+                    {
+                        if (ImGui.IsItemHovered())
+                        {
+                            ImGui.SetTooltip(enumValue.ToString());
+                        }
+
+                        ImGui.SetCursorPos(cursorPos);
+                        ImGui.Image(iconImage.Handle, new Vector2(24, 24) * IconRatio);
                     }
                 }
             }
         }
+
 
         if (isNumber)
         {
@@ -93,7 +129,45 @@ public static class GuiUtils
 
         ImGui.SameLine();
         ImGui.TextUnformatted(title);
+        var finalPos = ImGui.GetCursorPos();
+        if (selectedIcon != null)
+        {
+            ImGui.SetCursorPos(preComboPos + ImGui.GetStyle().FramePadding);
+            ImGui.Image(selectedIcon.Handle, new Vector2(17, 17) * IconRatio);
+            ImGui.SetCursorPos(finalPos);
+        }
 
         return changed;
+    }
+
+    private static IDalamudTextureWrap? GetIconTextureWrap(SteamIcon icon)
+    {
+        var iconName = $"steam_{icon.ToString().ToLower()}";
+        var iconPath = Services.IconService.GetIconPath(iconName, icon.GetIconUrl());
+
+        if (iconPath != null)
+        {
+            return Services.TextureProvider.GetFromFileAbsolute(iconPath).GetWrapOrDefault();
+        }
+
+        return null;
+    }
+
+    public static ImRaii.IEndObject Bullet()
+    {
+        ImGui.Bullet();
+        var indent = ImRaii.PushIndent(ImGui.GetTreeNodeToLabelSpacing());
+        return new ImRaii.EndUnconditionally(() => indent.Dispose(), true);
+    }
+
+    public static ImRaii.IEndObject PushFont(IFontHandle font, bool condition = true)
+    {
+        if (condition)
+        {
+            var disposable = font.Push();
+            return new ImRaii.EndConditionally(() => disposable.Dispose(), true);
+        }
+
+        return ImRaii.IEndObject.Empty;
     }
 }

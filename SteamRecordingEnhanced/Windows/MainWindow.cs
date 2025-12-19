@@ -5,6 +5,7 @@ using Dalamud.Interface.Utility.Raii;
 using Dalamud.Interface.Windowing;
 using FFXIVClientStructs.FFXIV.Client.Game;
 using FFXIVClientStructs.FFXIV.Client.System.Framework;
+using SteamRecordingEnhanced.PluginServices.Event;
 using SteamRecordingEnhanced.Steam;
 using SteamRecordingEnhanced.Utility;
 
@@ -24,12 +25,9 @@ public class MainWindow : Window
 
     public override unsafe void Draw()
     {
-        ImGui.TextUnformatted("Main yup");
-        unsafe
-        {
-            ImGui.TextUnformatted($"Steam handle by framework {Framework.Instance()->SteamApiLibraryHandle:X}");
-            ImGui.TextUnformatted($"CurrentContentFinderConditionId {GameMain.Instance()->CurrentContentFinderConditionId:X}");
-        }
+        ImGui.TextUnformatted($"Steam handle by framework {Framework.Instance()->SteamApiLibraryHandle:X}");
+        ImGui.TextUnformatted($"CurrentContentFinderConditionId {GameMain.Instance()->CurrentContentFinderConditionId:X}");
+        ImGui.TextUnformatted($"ShouldShowName {PvpKillEvent.ShouldShowName()}");
 
         if (!Services.SteamService.SteamLoaded)
         {

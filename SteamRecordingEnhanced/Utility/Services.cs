@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using Dalamud.Game;
 using Dalamud.IoC;
 using Dalamud.Plugin;
 using Dalamud.Plugin.Services;
@@ -55,6 +54,7 @@ public class Services
     public static SteamService SteamService { get; set; } = null!;
     public static EventService EventService { get; set; } = null!;
     public static TimelineService TimelineService { get; set; } = null!;
+    public static IconService IconService { get; set; } = null!;
     public static KillService KillService { get; set; } = null!;
     public static Plugin Plugin { get; set; } = null!;
 
@@ -69,6 +69,7 @@ public class Services
             ServiceList.Add(EventService = new());
             ServiceList.Add(TimelineService = new());
             ServiceList.Add(KillService = new());
+            ServiceList.Add(IconService = new());
         }
         catch
         {

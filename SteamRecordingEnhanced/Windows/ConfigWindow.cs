@@ -1,5 +1,4 @@
-﻿using System;
-using System.Numerics;
+﻿using System.Numerics;
 using Dalamud.Bindings.ImGui;
 using Dalamud.Interface.Utility.Raii;
 using Dalamud.Interface.Windowing;
@@ -12,14 +11,13 @@ public class ConfigWindow : Window
     private readonly ITab[] tabs =
     {
         new SettingsTab(),
-        new StatusTab(),
-        new AboutTab()
+        new StatusTab()
     };
 
     public ConfigWindow() : base(
         "Steam Recording Enhanced Configuration", ImGuiWindowFlags.AlwaysAutoResize)
     {
-        this.SizeConstraints = new WindowSizeConstraints
+        SizeConstraints = new WindowSizeConstraints
         {
             MinimumSize = new Vector2(375, 330),
             MaximumSize = new Vector2(float.MaxValue, 1000)

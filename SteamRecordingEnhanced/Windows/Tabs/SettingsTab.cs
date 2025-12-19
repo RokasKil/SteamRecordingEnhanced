@@ -31,13 +31,12 @@ internal class SettingsTab : ITab
         SettingCheckbox("Start sessions only in instances", ref Services.Configuration.SessionsOnlyInInstance);
         if (ImGui.CollapsingHeader("What are sessions?"))
         {
-            using var indent = ImRaii.PushIndent();
             using var textWrapPos = ImRaii.TextWrapPos(ImGui.GetFontSize() * 24);
             ImGui.TextWrapped("Steam allows games to split the recording into different sections with their" +
                               " own label and display them in the Sessions View." +
-                              " By default this plugin will start a new session each time you load into a new zone" +
-                              " which you can configure to only start a new session when you enter an instance." +
-                              " Each session will be labeled with and can be filtered by the character and zone name." +
+                              " By default this plugin will start a new session each time you load into a new zone," +
+                              " you can configure it to only start a new session when you enter an instance." +
+                              " Each session will be labeled and can be filtered by the character and zone name." +
                               " You can find the Sessions View by going to Recordings & Screenshots" +
                               " and clicking on the 3 vertical lines icon in the top left of the window or click" +
                               " the button below to open Session View in steam overlay.");

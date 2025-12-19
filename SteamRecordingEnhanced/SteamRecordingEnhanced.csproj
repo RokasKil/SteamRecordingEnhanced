@@ -2,9 +2,18 @@
 <Project Sdk="Dalamud.NET.Sdk/14.0.0.0">
     <PropertyGroup>
         <Version>0.1.0.0</Version>
-        <Description>A sample plugin.</Description>
-        <PackageProjectUrl>https://github.com/goatcorp/SteamRecordingEnhanced</PackageProjectUrl>
-        <PackageLicenseExpression>AGPL-3.0-or-later</PackageLicenseExpression>
-        <IsPackable>false</IsPackable>
+    </PropertyGroup>
+    <PropertyGroup>
+        <InternalName>SteamRecordingEnhanced</InternalName>
+        <Author>Speedas</Author>
+        <Name>Steam Recording Enhanced</Name>
+        <RepoUrl>https://github.com/RokasKil/SteamRecordingEnhanced</RepoUrl>
+        <Punchline>Add various in game events to your Steam Recording Timeline, comes with instructions for non-steam users!</Punchline>
+        <Description>
+            <![CDATA[Enhance Steam Recording by automatically adding configurable ingame events allowing for easy rewinding and cliping. Rewind to the moment of your death to reassure yourself that you did dodge the AOE before it went off and that the game does hate you personally with greater efficiency than ever!
+
+Non-steam users will have to follow a setup guide located in the configuration's window Status tab to get everything working.]]>
+        </Description>
+        <Tags>UI;steam;recording</Tags>
     </PropertyGroup>
 </Project>

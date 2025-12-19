@@ -1,6 +1,7 @@
 ﻿using Dalamud.Game.Command;
 using Dalamud.Interface.Windowing;
 using Dalamud.Plugin;
+using SteamRecordingEnhanced.PluginServices.Event;
 using SteamRecordingEnhanced.Utility;
 using SteamRecordingEnhanced.Windows;
 
@@ -8,9 +9,13 @@ namespace SteamRecordingEnhanced;
 
 public sealed class Plugin : IDalamudPlugin
 {
-    private const string CommandName = "/steamrecording";
+    private const string ConfigCommandName = "/steamrecording";
+    private const string EventCommandName = "/steamrecordingevent";
 
     public readonly WindowSystem WindowSystem = new("SteamRecordingEnhanced");
+
+    private ConfigWindow ConfigWindow { get; init; }
+    private MainWindow MainWindow { get; init; }
 
     public Plugin(IDalamudPluginInterface pluginInterface)
     {
@@ -23,20 +28,23 @@ public sealed class Plugin : IDalamudPlugin
         WindowSystem.AddWindow(ConfigWindow);
         WindowSystem.AddWindow(MainWindow);
 
-        Services.CommandManager.AddHandler(CommandName, new CommandInfo(OnCommand)
+        Services.CommandManager.AddHandler(ConfigCommandName, new CommandInfo(OnConfigCommand)
         {
-            HelpMessage = "steamrecording yup"
+            HelpMessage = "Open the configuration window"
+        });
+        Services.CommandManager.AddHandler(EventCommandName, new CommandInfo(OnEventCommand)
+        {
+            HelpMessage = "Manually place an event on the recording timeline. /steamrecordingevent [event title]"
         });
 
         Services.PluginInterface.UiBuilder.Draw += WindowSystem.Draw;
 
         Services.PluginInterface.UiBuilder.OpenConfigUi += ToggleConfigUi;
 
+#if DEBUG
         Services.PluginInterface.UiBuilder.OpenMainUi += ToggleMainUi;
+#endif
     }
-
-    private ConfigWindow ConfigWindow { get; init; }
-    private MainWindow MainWindow { get; init; }
 
     public void Dispose()
     {
@@ -46,13 +54,18 @@ public sealed class Plugin : IDalamudPlugin
         Services.PluginInterface.UiBuilder.OpenMainUi -= ToggleMainUi;
 
         WindowSystem.RemoveAllWindows();
-        Services.CommandManager.RemoveHandler(CommandName);
+        Services.CommandManager.RemoveHandler(ConfigCommandName);
         Services.Dispose();
     }
 
-    private void OnCommand(string command, string args)
+    private void OnConfigCommand(string command, string args)
     {
-        MainWindow.Toggle();
+        ToggleConfigUi();
+    }
+
+    private void OnEventCommand(string command, string args)
+    {
+        Services.TimelineService.AddEvent(args, "", "steam_marker", EventPriorities.USER_EVENT_PRIORITY);
     }
 
     public void ToggleConfigUi()

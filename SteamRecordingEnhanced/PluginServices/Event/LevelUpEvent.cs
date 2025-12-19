@@ -1,5 +1,4 @@
 ﻿using Dalamud.Hooking;
-using Lumina.Excel.Sheets;
 using SteamRecordingEnhanced.Utility;
 
 namespace SteamRecordingEnhanced.PluginServices.Event;
@@ -21,13 +20,7 @@ public class LevelUpEvent : AbstractEvent
         levelUpHook.Original(entityId, jobId, level);
         if (Services.ObjectTable.LocalPlayer?.EntityId == entityId)
         {
-            var jobName = $"UNKNOWN_JOB_{jobId}";
-            if (Services.DataManager.GetExcelSheet<ClassJob>().TryGetRow(jobId, out var classJobRow))
-            {
-                jobName = classJobRow.NameEnglish.ToString();
-            }
-
-            Services.TimelineService.AddEvent("Level up", $"{jobName} Lv. {level}", Services.Configuration.LevelUpIcon, EventPriorities.LEVEL_UP_PRIORITY);
+            Services.TimelineService.AddEvent("Level up", $"{Utils.GetJobName(jobId)} Lv. {level}", Services.Configuration.LevelUpIcon, EventPriorities.LEVEL_UP_PRIORITY);
         }
     }
 }

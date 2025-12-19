@@ -1,4 +1,6 @@
-﻿using Lumina.Excel.Sheets;
+﻿using System;
+using System.Linq;
+using Lumina.Excel.Sheets;
 
 namespace SteamRecordingEnhanced.Utility;
 
@@ -15,5 +17,37 @@ public static class Utils
         }
 
         return territory;
+    }
+
+    public static string GetJobName(uint jobId)
+    {
+        var jobName = $"UNKNOWN_JOB_{jobId}";
+        if (Services.DataManager.GetExcelSheet<ClassJob>().TryGetRow(jobId, out var classJobRow))
+        {
+            jobName = classJobRow.NameEnglish.ToString();
+        }
+
+        return jobName;
+    }
+
+    public static string GetJobAbbreviation(uint jobId)
+    {
+        var jobName = $"UNKNOWN_JOB_Abbreviation_{jobId}";
+        if (Services.DataManager.GetExcelSheet<ClassJob>().TryGetRow(jobId, out var classJobRow))
+        {
+            jobName = classJobRow.Abbreviation.ToString();
+        }
+
+        return jobName;
+    }
+
+    public static string? GetIconUrl(this Enum value)
+    {
+        return value.GetType()?
+                    .GetField(value.ToString())?
+                    .GetCustomAttributes(typeof(IconUrlAttribute), false)
+                    .SingleOrDefault() is IconUrlAttribute attribute
+                   ? attribute.Url
+                   : null;
     }
 }
