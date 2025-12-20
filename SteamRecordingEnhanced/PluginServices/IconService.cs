@@ -30,7 +30,7 @@ public class IconService : AbstractService
         IconFont = Services.PluginInterface.UiBuilder.FontAtlas
                            .NewDelegateFontHandle(e =>
                                                       e.OnPreBuild(tk =>
-                                                                       tk.AddDalamudDefaultFont(Services.PluginInterface.UiBuilder.FontDefaultSizePx / 17f * 24f)));
+                                                                       tk.AddDalamudDefaultFont(Services.PluginInterface.UiBuilder.FontDefaultSizePx / GuiUtils.BASE_FONT_SIZE * GuiUtils.ICON_SIZE)));
     }
 
     public string? GetIconPath(string iconName, string? url)

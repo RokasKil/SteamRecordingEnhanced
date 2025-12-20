@@ -9,12 +9,10 @@ namespace SteamRecordingEnhanced.Utility;
 public class Services
 {
     private static readonly List<AbstractService> ServiceList = [];
-
     private static bool Disposed;
+
     [PluginService]
     public static IClientState ClientState { get; set; } = null!;
-    // [PluginService]
-    // public static ISigScanner SigScanner { get; set; } = null!;
     [PluginService]
     public static IDataManager DataManager { get; set; } = null!;
     [PluginService]
@@ -30,17 +28,9 @@ public class Services
     [PluginService]
     public static ICommandManager CommandManager { get; set; } = null!;
     [PluginService]
-    public static IAddonLifecycle AddonLifecycle { get; set; } = null!;
-    [PluginService]
     public static ITextureProvider TextureProvider { get; set; } = null!;
     [PluginService]
-    public static ITitleScreenMenu TitleScreenMenu { get; set; } = null!;
-    [PluginService]
-    public static IKeyState KeyState { get; set; } = null!;
-    [PluginService]
     public static INotificationManager NotificationManager { get; set; } = null!;
-    [PluginService]
-    public static IChatGui ChatGui { get; set; } = null!;
     [PluginService]
     public static IObjectTable ObjectTable { get; set; } = null!;
     [PluginService]
@@ -55,7 +45,6 @@ public class Services
     public static EventService EventService { get; set; } = null!;
     public static TimelineService TimelineService { get; set; } = null!;
     public static IconService IconService { get; set; } = null!;
-    public static KillService KillService { get; set; } = null!;
     public static Plugin Plugin { get; set; } = null!;
 
     public static void ConstructServices(IDalamudPluginInterface pluginInterface, Plugin plugin)
@@ -68,7 +57,6 @@ public class Services
             ServiceList.Add(SteamService = new());
             ServiceList.Add(EventService = new());
             ServiceList.Add(TimelineService = new());
-            ServiceList.Add(KillService = new());
             ServiceList.Add(IconService = new());
         }
         catch

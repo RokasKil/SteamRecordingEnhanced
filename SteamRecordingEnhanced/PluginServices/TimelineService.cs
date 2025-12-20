@@ -8,7 +8,7 @@ namespace SteamRecordingEnhanced.PluginServices;
 
 public unsafe class TimelineService : AbstractService
 {
-    private const float MinimumEventInterval = 0.5f;
+    private const float MinimumEventInterval = 1f;
     public TimelineGameMode CurrentGameMode { get; private set; } = TimelineGameMode.Invalid;
     private readonly SortedSet<DateTime> eventDates = [];
 

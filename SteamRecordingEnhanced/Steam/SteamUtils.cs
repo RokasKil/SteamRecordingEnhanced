@@ -3,7 +3,7 @@ using SteamRecordingEnhanced.Utility.Interop;
 
 namespace SteamRecordingEnhanced.Steam;
 
-// Based on https://github.com/rlabrecque/SteamworksSDK/blob/main/public/steam/isteamutils.h
+// Based on SteamworksSDK
 [StructLayout(LayoutKind.Sequential)]
 public unsafe struct SteamUtils
 {

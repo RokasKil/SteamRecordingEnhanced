@@ -27,7 +27,7 @@ public class ConfigWindow : Window
     public override void Draw()
     {
         using var id = ImRaii.PushId(WindowName);
-        using var tabBar = ImRaii.TabBar("##ConfigTabs");
+        using var tabBar = ImRaii.TabBar("");
         if (tabBar)
         {
             foreach (var tab in tabs)

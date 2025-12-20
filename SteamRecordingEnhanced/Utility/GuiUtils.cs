@@ -10,7 +10,11 @@ namespace SteamRecordingEnhanced.Utility;
 
 public static class GuiUtils
 {
-    public static float IconRatio => ImGui.GetFontSize() / 17.0f;
+    // Used for scaling with non standard font sizes
+    public const float ICON_SIZE = 24f;
+    public const float BASE_FONT_SIZE = 17f;
+
+    public static float IconRatio => ImGui.GetFontSize() / BASE_FONT_SIZE;
 
     public static bool Combo<T>(string title, ref T value, ImGuiComboFlags flags = ImGuiComboFlags.None) where T : Enum
     {
@@ -103,7 +107,7 @@ public static class GuiUtils
                         }
 
                         ImGui.SetCursorPos(cursorPos);
-                        ImGui.Image(iconImage.Handle, new Vector2(24, 24) * IconRatio);
+                        ImGui.Image(iconImage.Handle, new Vector2(ICON_SIZE, ICON_SIZE) * IconRatio);
                     }
                 }
             }

@@ -11,10 +11,10 @@ using SteamRecordingEnhanced.Utility;
 
 namespace SteamRecordingEnhanced.Windows;
 
-public class MainWindow : Window
+public class DebugWindow : Window
 {
-    public MainWindow()
-        : base("My Amazing Window##With a hidden ID")
+    public DebugWindow()
+        : base("Steam Recording Debug Window")
     {
         SizeConstraints = new WindowSizeConstraints
         {
