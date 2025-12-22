@@ -8,40 +8,46 @@ on:
       - '*'
 
 jobs:
-
   build:
     runs-on: windows-2022
-
     env:
       Solution_Name: SteamRecordingEnhanced
-
     steps:
-    - name: Checkout
-      uses: actions/checkout@v5
+      - name: Checkout
+        uses: actions/checkout@v5
+      - name: Install .NET
+        uses: actions/setup-dotnet@v5
+        with:
+          dotnet-version: 10.0.x
+      - name: Download Dalamud
+        run: |
+          Invoke-WebRequest -Uri https://goatcorp.github.io/dalamud-distrib/latest.zip -OutFile latest.zip
+          Expand-Archive -Force latest.zip "$env:AppData\XIVLauncher\addon\Hooks\dev"
 
-    - name: Install .NET
-      uses: actions/setup-dotnet@v5
-      with:
-        dotnet-version: 10.0.x
+      - name: Build with dotnet
+        run: dotnet build --configuration Release
 
-    - name: Download Dalamud
-      run: |
-        Invoke-WebRequest -Uri https://goatcorp.github.io/dalamud-distrib/latest.zip -OutFile latest.zip
-        Expand-Archive -Force latest.zip "$env:AppData\XIVLauncher\addon\Hooks\dev"
-
-    - name: Build with dotnet
-      run: dotnet build --configuration Release
-
-    - name: Store artifacts
-      uses: actions/upload-artifact@v4
-      with:
-        name: SteamRecordingEnhanced
-        path: .\SteamRecordingEnhanced\bin\x64\Release\SteamRecordingEnhanced\*
-        if-no-files-found: error
-        retention-days: 1
-    - name: Release
-      uses: softprops/action-gh-release@v2
-      if: github.ref_type == 'tag'
-      with:
-        fail_on_unmatched_files: true
-        files: ./SteamRecordingEnhanced/bin/x64/Release/SteamRecordingEnhanced/latest.zip
+      - name: Store artifacts
+        uses: actions/upload-artifact@v6
+        with:
+          name: SteamRecordingEnhanced
+          path: .\SteamRecordingEnhanced\bin\x64\Release\SteamRecordingEnhanced\*
+          if-no-files-found: error
+          retention-days: 1
+  release:
+    runs-on: windows-2022
+    needs: build
+    if: github.ref_type == 'tag'
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v5
+      - name: Download
+        uses: actions/download-artifact@v7
+        with:
+          name: SteamRecordingEnhanced
+          path: ./artifacts
+      - name: Release
+        uses: softprops/action-gh-release@v2
+        with:
+          fail_on_unmatched_files: true
+          files: ./artifacts/SteamRecordingEnhanced/latest.zip
