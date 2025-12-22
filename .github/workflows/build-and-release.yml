@@ -39,9 +39,9 @@ jobs:
         path: .\SteamRecordingEnhanced\bin\x64\Release\SteamRecordingEnhanced\*
         if-no-files-found: error
         retention-days: 1
-    - name: Release if tagged
+    - name: Release
       uses: softprops/action-gh-release@v2
       if: github.ref_type == 'tag'
       with:
         fail_on_unmatched_files: true
-        files: .\SteamRecordingEnhanced\bin\x64\Release\SteamRecordingEnhanced\latest.zip
+        files: ./SteamRecordingEnhanced/bin/x64/Release/SteamRecordingEnhanced/latest.zip
