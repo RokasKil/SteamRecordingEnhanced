@@ -46,6 +46,8 @@ jobs:
         with:
           name: SteamRecordingEnhanced
           path: ./artifacts
+      - name: Display structure of downloaded files
+        run: ls -R ./artifacts
       - name: Release
         uses: softprops/action-gh-release@v2
         with:
