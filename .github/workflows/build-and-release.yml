@@ -9,12 +9,12 @@ on:
 
 jobs:
   build:
-    runs-on: windows-2022
+    runs-on: windows-latest
     env:
       Solution_Name: SteamRecordingEnhanced
     steps:
       - name: Checkout
-        uses: actions/checkout@v5
+        uses: actions/checkout@v6
       - name: Install .NET
         uses: actions/setup-dotnet@v5
         with:
@@ -35,12 +35,15 @@ jobs:
           if-no-files-found: error
           retention-days: 1
   release:
-    runs-on: windows-2022
+    runs-on: windows-latest
     needs: build
     if: github.ref_type == 'tag'
     steps:
       - name: Checkout
-        uses: actions/checkout@v5
+        uses: actions/checkout@v6
+        with:
+          persist-credentials: true 
+          fetch-depth: 0
       - name: Download
         uses: actions/download-artifact@v7
         with:
@@ -56,7 +59,7 @@ jobs:
           files: ./artifacts/latest.zip
       - name: Make repo.json
         run: |
-          $url = '${{ fromJSON(steps.release.outputs.assets)[0].browser_download_url }}'
+          $url = '${{github.server_url}}/${{ github.repository }}/releases/download/${{ github.ref_name }}/latest.zip'
           $iconUrl = 'https://raw.githubusercontent.com/${{ github.repository }}/refs/tags/${{ github.ref_name }}/icon/icon_128px.png'
           $inPath = './artifacts/SteamRecordingEnhanced.json'
           $outPath = './repo.json'
@@ -67,4 +70,11 @@ jobs:
           $manifest | Add-Member -MemberType NoteProperty -Name 'DownloadCount' -Value "0"
           ConvertTo-Json -InputObject @($manifest) | Set-Content -Path $outPath -Encoding UTF8
       - name: Print repo.json
-        run: Get-Content repo.json
+        run: Get-Content ./repo.json,
+      - name: Commit repo.json
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add ./repo.json
+          git diff --cached --quiet || git commit -m "Update repo.json for ${{ github.ref_name }} [skip ci]"
+          git push origin HEAD:master
