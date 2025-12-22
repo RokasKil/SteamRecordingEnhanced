@@ -67,4 +67,4 @@ jobs:
           $manifest | Add-Member -MemberType NoteProperty -Name 'DownloadCount' -Value "0"
           ConvertTo-Json -InputObject @($manifest) | Set-Content -Path $outPath -Encoding UTF8
       - name: Print repo.json
-        run: Get-Content $outPath
+        run: Get-Content repo.json
