@@ -2,7 +2,10 @@ name: Build and release
 
 on:
   push:
-    branches: [ "master" ]
+    branches:
+      - master
+    tags:
+      - '*'
 
 jobs:
 
