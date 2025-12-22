@@ -49,8 +49,6 @@ jobs:
         with:
           name: SteamRecordingEnhanced
           path: ./artifacts
-      - name: Display structure of downloaded files
-        run: ls -R ./artifacts
       - name: Release
         uses: softprops/action-gh-release@v2
         id: release
@@ -69,8 +67,6 @@ jobs:
           $manifest | Add-Member -MemberType NoteProperty -Name 'IconUrl' -Value $iconUrl
           $manifest | Add-Member -MemberType NoteProperty -Name 'DownloadCount' -Value "0"
           ConvertTo-Json -InputObject @($manifest) | Set-Content -Path $outPath -Encoding UTF8
-      - name: Print repo.json
-        run: Get-Content ./repo.json
       - name: Commit repo.json
         run: |
           git config user.name "github-actions[bot]"
