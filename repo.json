@@ -19,9 +19,9 @@
     "LoadPriority": 0,
     "Punchline": "Add various in-game events to your Steam Game Recording timeline, comes with instructions for non-steam users!",
     "AcceptsFeedback": true,
-    "DownloadLinkInstall": "https://github.com/RokasKil/SteamRecordingEnhanced/releases/download/v0.1.0.10/latest.zip",
-    "DownloadLinkUpdate": "https://github.com/RokasKil/SteamRecordingEnhanced/releases/download/v0.1.0.10/latest.zip",
-    "IconUrl": "https://raw.githubusercontent.com/RokasKil/SteamRecordingEnhanced/refs/tags/v0.1.0.10/icon/icon_128px.png",
+    "DownloadLinkInstall": "https://github.com/RokasKil/SteamRecordingEnhanced/releases/download/v0.1.0.0/latest.zip",
+    "DownloadLinkUpdate": "https://github.com/RokasKil/SteamRecordingEnhanced/releases/download/v0.1.0.0/latest.zip",
+    "IconUrl": "https://raw.githubusercontent.com/RokasKil/SteamRecordingEnhanced/refs/tags/v0.1.0.0/icon/icon_128px.png",
     "DownloadCount": "0"
   }
 ]
