@@ -12,7 +12,7 @@ public unsafe class AchievementUnlockEvent : AbstractEvent
 {
     private const uint AchievementLogMessageRowId = 952;
 
-    delegate void AddLogMessageDelegate(IntPtr raptureLogModule, uint logMessageRowId, Character* character, StdDeque<TextParameter>* logParameters);
+    private delegate void AddLogMessageDelegate(IntPtr raptureLogModule, uint logMessageRowId, Character* character, StdDeque<TextParameter>* logParameters);
 
     private readonly Hook<AddLogMessageDelegate> addLogMessageHook;
 

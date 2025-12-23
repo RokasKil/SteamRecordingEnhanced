@@ -9,7 +9,7 @@ public unsafe class QuestCompleteEvent : AbstractEvent
 {
     private const uint QuestCompleteLogMessageRowId = 1602;
 
-    public delegate void EventFrameworkAddLogDelegate(IntPtr eventFrameworkPtr, uint logMessageRowId, uint* logData, byte logDataLength);
+    private delegate void EventFrameworkAddLogDelegate(IntPtr eventFrameworkPtr, uint logMessageRowId, uint* logData, byte logDataLength);
 
     private readonly Hook<EventFrameworkAddLogDelegate> eventFrameworkAddLogHook;
 
@@ -33,5 +33,7 @@ public unsafe class QuestCompleteEvent : AbstractEvent
 
             Services.TimelineService.AddEvent("Quest complete", questName, Services.Configuration.QuestCompleteIcon, EventPriorities.QUEST_COMPLETE_PRIORITY);
         }
+
+        eventFrameworkAddLogHook.Original(eventFrameworkPtr, logMessageRowId, logData, logDataLength);
     }
 }

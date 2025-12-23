@@ -5,7 +5,7 @@ namespace SteamRecordingEnhanced.PluginServices.Event;
 
 public class LevelUpEvent : AbstractEvent
 {
-    public delegate void LevelUpDelegate(uint entityId, uint jobId, ushort level);
+    private delegate void LevelUpDelegate(uint entityId, uint jobId, ushort level);
 
     private readonly Hook<LevelUpDelegate> levelUpHook;
 

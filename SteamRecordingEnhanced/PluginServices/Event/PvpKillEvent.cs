@@ -15,7 +15,7 @@ public unsafe class PvpKillEvent : AbstractEvent
     private const uint CrystallineConflictTerritoryIntendedUseId1 = 28;
     private const uint CrystallineConflictTerritoryIntendedUseId2 = 37;
 
-    public delegate void AddActionLogMessageDelegate(uint logMessageRowId, Character* source, Character* target, uint unk4, uint unk5, uint unk6, uint unk7, uint unk8, uint unk9, float unk10);
+    private delegate void AddActionLogMessageDelegate(uint logMessageRowId, Character* source, Character* target, uint unk4, uint unk5, uint unk6, uint unk7, uint unk8, uint unk9, float unk10);
 
     private readonly Hook<AddActionLogMessageDelegate> addActionLogMessageHook;
 
