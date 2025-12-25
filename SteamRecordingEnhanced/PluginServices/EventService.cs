@@ -18,6 +18,7 @@ public class EventService : AbstractService
         events.Add(new TerritoryChangeEvent());
         events.Add(new DutyEvent());
         events.Add(new LevelUpEvent());
+        events.Add(new FateEvent());
     }
 
     public override void Dispose()

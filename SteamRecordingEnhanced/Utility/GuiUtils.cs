@@ -113,6 +113,19 @@ public static class GuiUtils
             }
         }
 
+        // get cursor pos for label/number
+        ImGui.SameLine();
+        var finalPos = ImGui.GetCursorPos();
+        if (selectedIcon != null)
+        {
+            ImGui.SetCursorPos(preComboPos + ImGui.GetStyle().FramePadding);
+            ImGui.Image(selectedIcon.Handle, new Vector2(17, 17) * IconRatio);
+            // This is necessary for preserving the line height I think?
+            // Without it the next item will be placed with not enough vertical spacing
+            ImGui.SameLine();
+            // Restore pos for label/number
+            ImGui.SetCursorPos(finalPos);
+        }
 
         if (isNumber)
         {
@@ -129,17 +142,12 @@ public static class GuiUtils
             {
                 ImGui.SetTooltip("A Number from 1 to 99 to be used as the icon");
             }
+
+            ImGui.SameLine();
         }
 
-        ImGui.SameLine();
         ImGui.TextUnformatted(title);
-        var finalPos = ImGui.GetCursorPos();
-        if (selectedIcon != null)
-        {
-            ImGui.SetCursorPos(preComboPos + ImGui.GetStyle().FramePadding);
-            ImGui.Image(selectedIcon.Handle, new Vector2(17, 17) * IconRatio);
-            ImGui.SetCursorPos(finalPos);
-        }
+
 
         return changed;
     }

@@ -30,6 +30,17 @@ public static class Utils
         return jobName;
     }
 
+    public static string GetPhantomJobName(uint jobId)
+    {
+        var jobName = $"UNKNOWN_PHANTOM_JOB_{jobId}";
+        if (Services.DataManager.GetExcelSheet<MKDSupportJob>().TryGetRow(jobId, out var mkdSupportJobRow))
+        {
+            jobName = mkdSupportJobRow.NameEnglish.ToString();
+        }
+
+        return jobName;
+    }
+
     public static string GetJobAbbreviation(uint jobId)
     {
         var jobName = $"UNKNOWN_JOB_Abbreviation_{jobId}";
@@ -44,10 +55,10 @@ public static class Utils
     public static string? GetIconUrl(this Enum value)
     {
         return value.GetType()?
-                    .GetField(value.ToString())?
-                    .GetCustomAttributes(typeof(IconUrlAttribute), false)
-                    .SingleOrDefault() is IconUrlAttribute attribute
-                   ? attribute.Url
-                   : null;
+            .GetField(value.ToString())?
+            .GetCustomAttributes(typeof(IconUrlAttribute), false)
+            .SingleOrDefault() is IconUrlAttribute attribute
+            ? attribute.Url
+            : null;
     }
 }

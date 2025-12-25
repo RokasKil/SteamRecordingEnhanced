@@ -1,4 +1,5 @@
 using Dalamud.Bindings.ImGui;
+using Dalamud.Interface.Components;
 using Dalamud.Interface.Utility.Raii;
 using SteamRecordingEnhanced.Utility;
 
@@ -12,12 +13,15 @@ internal class SettingsTab : ITab
     {
         ImGui.TextUnformatted("Event icons");
         SettingsSteamIconSelect($"Level up", ref Services.Configuration.LevelUpIcon);
-        SettingsSteamIconSelect($"Quest complete", ref Services.Configuration.QuestCompleteIcon);
+        ImGuiComponents.HelpMarker("Works with Eureka and Occult Crescent leveling systems.");
+        SettingsSteamIconSelect($"Quest completed", ref Services.Configuration.QuestCompleteIcon);
         SettingsSteamIconSelect($"Achievement unlocked", ref Services.Configuration.AchievementUnlockedIcon);
+        SettingsSteamIconSelect($"Fate completed", ref Services.Configuration.FateCompleteIcon);
+        ImGuiComponents.HelpMarker("Works with Eureka, Bozja and Occult Crescent fates and critical engagements.");
         SettingsSteamIconSelect($"Territory changed", ref Services.Configuration.TerritoryChangedIcon);
         SettingsSteamIconSelect($"Duty started", ref Services.Configuration.DutyStartedIcon);
         SettingsSteamIconSelect($"Duty wiped", ref Services.Configuration.DutyWipedIcon);
-        SettingsSteamIconSelect($"Duty complete", ref Services.Configuration.DutyCompleteIcon);
+        SettingsSteamIconSelect($"Duty completed", ref Services.Configuration.DutyCompleteIcon);
         SettingsSteamIconSelect($"Player died", ref Services.Configuration.PlayerDiedIcon);
         SettingsSteamIconSelect($"Party member died", ref Services.Configuration.PartyMemberDiedIcon);
         SettingsSteamIconSelect($"PVP kill", ref Services.Configuration.PvpKillIcon);

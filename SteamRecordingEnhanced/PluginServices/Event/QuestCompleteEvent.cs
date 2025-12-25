@@ -31,7 +31,7 @@ public unsafe class QuestCompleteEvent : AbstractEvent
                 questName = questRow.Name.ToString();
             }
 
-            Services.TimelineService.AddEvent("Quest complete", questName, Services.Configuration.QuestCompleteIcon, EventPriorities.QUEST_COMPLETE_PRIORITY);
+            Services.TimelineService.AddEvent("Quest completed", questName, Services.Configuration.QuestCompleteIcon, EventPriorities.QUEST_COMPLETE_PRIORITY);
         }
 
         eventFrameworkAddLogHook.Original(eventFrameworkPtr, logMessageRowId, logData, logDataLength);

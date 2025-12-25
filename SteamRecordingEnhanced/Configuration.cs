@@ -17,6 +17,7 @@ public class Configuration : IPluginConfiguration
     public string PlayerDiedIcon = "steam_death";
     public string PartyMemberDiedIcon = "steam_death";
     public string PvpKillIcon = "steam_combat";
+    public string FateCompleteIcon = "steam_chest";
 
     public bool HighlightCombat = true;
 

@@ -39,6 +39,8 @@ public class Services
     public static IDutyState DutyState { get; set; } = null!;
     [PluginService]
     public static IPartyList PartyList { get; set; } = null!;
+    [PluginService]
+    public static IAddonLifecycle AddonLifecylce { get; set; } = null!;
     public static IDalamudPluginInterface PluginInterface { get; set; } = null!;
     public static Configuration Configuration { get; set; } = null!;
     public static SteamService SteamService { get; set; } = null!;

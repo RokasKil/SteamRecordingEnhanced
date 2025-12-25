@@ -1,26 +1,74 @@
-﻿using Dalamud.Hooking;
+﻿using System;
+using Dalamud.Hooking;
+using FFXIVClientStructs.FFXIV.Client.Game.Character;
 using SteamRecordingEnhanced.Utility;
 
 namespace SteamRecordingEnhanced.PluginServices.Event;
 
-public class LevelUpEvent : AbstractEvent
+public unsafe class LevelUpEvent : AbstractEvent
 {
-    private delegate void LevelUpDelegate(uint entityId, uint jobId, ushort level);
+    // Regular content
+    private const uint LevelUpMessageId = 590;
+    private const uint LevelUpOtherJobMessageId = 591;
+    // Eureka
+    private const uint ElementalLevelUpMessageId = 9053;
+    // Bozja
+    private const uint LevelUpResistanceRankMessageId = 9630;
+    //Crescent
+    private const uint LevelUpKnowledgeMessageId = 10955;
+    private const uint LevelUpPhantomJobMessageId = 10957;
 
-    private readonly Hook<LevelUpDelegate> levelUpHook;
+    private delegate void LevelLogMessageDelegate(uint messageId, Character* character, uint num1, uint num2, uint unk5, float unk6);
+
+    private readonly Hook<LevelLogMessageDelegate> levelLogMessageHook;
 
     public LevelUpEvent()
     {
-        levelUpHook = Hook<LevelUpDelegate>("40 55 57 41 55 41 56 41 57 48 83 EC ?? 44 8B F9", LevelUpDetour);
+        levelLogMessageHook = Hook<LevelLogMessageDelegate>("E9 ?? ?? ?? ?? 45 88 83", LevelLogMessageDetour);
         EnableHooks();
     }
 
-    private void LevelUpDetour(uint entityId, uint jobId, ushort level)
+    private void LevelLogMessageDetour(uint messageId, Character* character, uint num1, uint num2, uint unk5, float unk6)
     {
-        levelUpHook.Original(entityId, jobId, level);
-        if (Services.ObjectTable.LocalPlayer?.EntityId == entityId)
+        levelLogMessageHook.Original(messageId, character, num1, num2, unk5, unk6);
+        if (character == null || (IntPtr)character != Services.ObjectTable.LocalPlayer?.Address)
         {
-            Services.TimelineService.AddEvent("Level up", $"{Utils.GetJobName(jobId)} Lv. {level}", Services.Configuration.LevelUpIcon, EventPriorities.LEVEL_UP_PRIORITY);
+            return;
         }
+
+        string title;
+        string description;
+        if (messageId is LevelUpMessageId or LevelUpOtherJobMessageId)
+        {
+            title = "Level up";
+            description = $"{Utils.GetJobName(num1)} Lv. {num2}";
+        }
+        else if (messageId is ElementalLevelUpMessageId)
+        {
+            title = "Elemental level up";
+            description = $"Lv. {num1}";
+        }
+        // TODO: Bozja rank up doesn't work (I think, hard to test when already maxxed rank and the instances are kinda dead)
+        else if (messageId is LevelUpResistanceRankMessageId)
+        {
+            title = "Resistance rank up";
+            description = $"Rank {num2}";
+        }
+        else if (messageId is LevelUpKnowledgeMessageId)
+        {
+            title = "Knowledge level up";
+            description = $"Lv. {num1}";
+        }
+        else if (messageId is LevelUpPhantomJobMessageId)
+        {
+            title = "Phantom Job level up";
+            description = $"{Utils.GetPhantomJobName(num1)} Lv. {num2}";
+        }
+        else
+        {
+            return;
+        }
+
+        Services.TimelineService.AddEvent(title, description, Services.Configuration.LevelUpIcon, EventPriorities.LEVEL_UP_PRIORITY);
     }
 }
