@@ -48,7 +48,7 @@ public unsafe class LevelUpEvent : AbstractEvent
             title = "Elemental level up";
             description = $"Lv. {num1}";
         }
-        // TODO: Bozja rank up doesn't work (I think, hard to test when already maxxed rank and the instances are kinda dead)
+        // TODO: Bozja rank up doesn't work (I think, hard to test when already maxed rank and the instances are kinda dead)
         else if (messageId is LevelUpResistanceRankMessageId)
         {
             title = "Resistance rank up";

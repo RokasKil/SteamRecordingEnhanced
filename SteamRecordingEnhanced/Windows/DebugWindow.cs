@@ -1,10 +1,17 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Numerics;
 using Dalamud.Bindings.ImGui;
+using Dalamud.Game.Text;
+using Dalamud.Interface;
 using Dalamud.Interface.Utility.Raii;
 using Dalamud.Interface.Windowing;
 using FFXIVClientStructs.FFXIV.Client.Game;
 using FFXIVClientStructs.FFXIV.Client.System.Framework;
+using Lumina.Data;
+using Lumina.Excel.Exceptions;
+using Lumina.Excel.Sheets;
 using SteamRecordingEnhanced.PluginServices.Event;
 using SteamRecordingEnhanced.Steam;
 using SteamRecordingEnhanced.Utility;
@@ -58,6 +65,9 @@ public class DebugWindow : Window
                     Services.TimelineService.AddEvent(i.ToString(), "", $"steam_{i}", i, -5);
                 }
             }
+
+            ImGui.Separator();
+            DrawSeIconTest(timeline);
         }
     }
 
@@ -230,6 +240,60 @@ public class DebugWindow : Window
         if (ImGui.Button("OpenOverlayToGamePhase"))
         {
             timeline->OpenOverlayToGamePhase(phaseId);
+        }
+    }
+
+    private string seIconString = string.Join(null, Enum.GetValues<SeIconChar>().Select(seIconChar => seIconChar.ToIconChar()));
+
+    private unsafe void DrawSeIconTest(SteamTimeline* timeline)
+    {
+        ImGui.InputText("SeIconString", ref seIconString, 4096);
+        ImGui.SameLine();
+        using (ImRaii.PushFont(UiBuilder.IconFont))
+            if (ImGui.Button(FontAwesomeIcon.Repeat.ToIconString()))
+            {
+                seIconString = string.Join(null, Enum.GetValues<SeIconChar>().Select(seIconChar => seIconChar.ToIconChar()));
+            }
+
+        if (ImGui.Button("Test"))
+        {
+            Services.TimelineService.AddEvent(seIconString, seIconString, "steam_flag");
+        }
+
+        ImGui.SameLine();
+        if (ImGui.Button("Gather symbols from sheets"))
+        {
+            var symbols = new HashSet<char>();
+            foreach (var language in Enum.GetValues<Language>())
+            {
+                try
+                {
+                    foreach (var quest in Services.DataManager.Excel.GetSheet<Quest>(language))
+                    {
+                        symbols.UnionWith(quest.Name.ToString().ToCharArray());
+                    }
+
+                    foreach (var achievement in Services.DataManager.Excel.GetSheet<Achievement>(language))
+                    {
+                        symbols.UnionWith(achievement.Name.ToString().ToCharArray());
+                    }
+
+                    foreach (var fate in Services.DataManager.Excel.GetSheet<Fate>(language))
+                    {
+                        symbols.UnionWith(fate.Name.ToString().ToCharArray());
+                    }
+
+                    foreach (var dynamicEvent in Services.DataManager.Excel.GetSheet<DynamicEvent>(language))
+                    {
+                        symbols.UnionWith(dynamicEvent.Name.ToString().ToCharArray());
+                    }
+                }
+                catch (UnsupportedLanguageException)
+                {
+                }
+            }
+
+            seIconString = string.Join(null, symbols.Where(chr => Enum.IsDefined(typeof(SeIconChar), (int)chr)));
         }
     }
 }

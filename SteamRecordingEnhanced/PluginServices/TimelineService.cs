@@ -20,6 +20,8 @@ public unsafe class TimelineService : AbstractService
             return;
         }
 
+        title = PrepareString(title)!;
+        description = PrepareString(description)!;
         var timeline = Services.SteamService.GetSteamTimeline();
         if (timeline == null)
         {
@@ -54,6 +56,8 @@ public unsafe class TimelineService : AbstractService
 
     public ulong? StartEvent(string title, string description, string icon)
     {
+        title = PrepareString(title)!;
+        description = PrepareString(description)!;
         var timeline = Services.SteamService.GetSteamTimeline();
         if (timeline != null)
         {
@@ -107,6 +111,7 @@ public unsafe class TimelineService : AbstractService
 
     public void SetGamePhaseAttribute(string attributeGroup, string attributeValue, uint priority = 0)
     {
+        attributeValue = PrepareString(attributeValue)!;
         var timeline = Services.SteamService.GetSteamTimeline();
         if (timeline != null)
         {
@@ -116,6 +121,7 @@ public unsafe class TimelineService : AbstractService
 
     public void AddGamePhaseTag(string tagName, string tagIcon, string tagGroup, uint priority = 0)
     {
+        tagName = PrepareString(tagName)!;
         var timeline = Services.SteamService.GetSteamTimeline();
         if (timeline != null)
         {
@@ -125,6 +131,7 @@ public unsafe class TimelineService : AbstractService
 
     public void SetTimelineTooltip(string? tooltip)
     {
+        tooltip = PrepareString(tooltip);
         var timeline = Services.SteamService.GetSteamTimeline();
         if (timeline != null)
         {
@@ -155,4 +162,6 @@ public unsafe class TimelineService : AbstractService
             timeline->OpenOverlayToGamePhase(phaseId);
         }
     }
+
+    private string? PrepareString(string? input) => input != null ? Utils.ClearSeQuestIcons(input) : input;
 }

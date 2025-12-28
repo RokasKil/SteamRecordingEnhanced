@@ -1,6 +1,7 @@
-﻿using System;
-using System.Linq;
+﻿using System.Linq;
+using Dalamud.Game.Text;
 using Lumina.Excel.Sheets;
+using SteamRecordingEnhanced.Steam;
 
 namespace SteamRecordingEnhanced.Utility;
 
@@ -52,7 +53,7 @@ public static class Utils
         return jobName;
     }
 
-    public static string? GetIconUrl(this Enum value)
+    public static string? GetIconUrl(this SteamIcon value)
     {
         return value.GetType()?
             .GetField(value.ToString())?
@@ -60,5 +61,13 @@ public static class Utils
             .SingleOrDefault() is IconUrlAttribute attribute
             ? attribute.Url
             : null;
+    }
+
+    // Some quest names contains these symbols and there are no good alternatives that steam can render
+    // so we just remove them
+    public static string ClearSeQuestIcons(string input)
+    {
+        return input.Replace(SeIconChar.QuestRepeatable.ToIconString(), "")
+            .Replace(SeIconChar.QuestSync.ToIconString(), "");
     }
 }

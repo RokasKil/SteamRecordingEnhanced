@@ -25,6 +25,8 @@ internal class SettingsTab : ITab
         SettingsSteamIconSelect($"Player died", ref Services.Configuration.PlayerDiedIcon);
         SettingsSteamIconSelect($"Party member died", ref Services.Configuration.PartyMemberDiedIcon);
         SettingsSteamIconSelect($"PVP kill", ref Services.Configuration.PvpKillIcon);
+        ImGuiComponents.HelpMarker("Works by reading the combat log which is known to not be 100% accurate" +
+                                   " but it will works most of the time.");
 
         ImGui.Separator();
         ImGui.TextUnformatted("Highlighted events");
