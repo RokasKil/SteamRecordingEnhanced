@@ -23,13 +23,11 @@ public class TerritoryChangeEvent : AbstractEvent
     private void StartPhase()
     {
         Services.TimelineService.EndGamePhase();
-        for (int i = 0; i < Services.Condition.MaxEntries; i++)
-        {
-            if (Services.Condition[i])
-            {
-                Services.Log.Debug($"{(ConditionFlag)i}");
-            }
-        }
+
+        string territory = Utils.GetTerritoryName(Services.ClientState.TerritoryType);
+
+        // Timeline tooltip
+        Services.TimelineService.SetTimelineTooltip(territory);
 
         if (Services.Configuration.SessionsOnlyInInstance && !Services.Condition.Any(
                 ConditionFlag.BoundByDuty,
@@ -42,7 +40,6 @@ public class TerritoryChangeEvent : AbstractEvent
 
         string world = Services.PlayerState.HomeWorld.ValueNullable?.Name.ToString() ?? "UNKNOWN_WORLD";
         string name = $"{Services.PlayerState.CharacterName}@{world}";
-        string territory = Utils.GetTerritoryName(Services.ClientState.TerritoryType);
 
         Services.TimelineService.StartGamePhase();
         // Non searchable info
@@ -50,9 +47,6 @@ public class TerritoryChangeEvent : AbstractEvent
         Services.TimelineService.SetGamePhaseAttribute("territory", territory, 0);
         // Searchable info that doesn't display text if the icon is set for some reason?
         Services.TimelineService.AddGamePhaseTag(name + " " + territory, "steam_person", "search_tag");
-
-        // Timeline tooltip
-        Services.TimelineService.SetTimelineTooltip(territory);
     }
 
     public override void Dispose()
