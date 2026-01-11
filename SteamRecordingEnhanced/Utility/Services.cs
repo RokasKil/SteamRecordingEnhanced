@@ -40,6 +40,8 @@ public class Services
     [PluginService]
     public static IPartyList PartyList { get; set; } = null!;
     [PluginService]
+    public static IChatGui ChatGui { get; set; } = null!;
+    [PluginService]
     public static IAddonLifecycle AddonLifecylce { get; set; } = null!;
     public static IDalamudPluginInterface PluginInterface { get; set; } = null!;
     public static Configuration Configuration { get; set; } = null!;
@@ -54,6 +56,8 @@ public class Services
         pluginInterface.Create<Services>();
         Plugin = plugin;
         PluginInterface = pluginInterface;
+        Configuration = PluginInterface.GetPluginConfig() as Configuration ?? new Configuration();
+        Configuration.SetDefaults();
         try
         {
             ServiceList.Add(SteamService = new());
@@ -66,8 +70,6 @@ public class Services
             Dispose();
             throw;
         }
-
-        Configuration = PluginInterface.GetPluginConfig() as Configuration ?? new Configuration();
     }
 
     public static void InitServices()

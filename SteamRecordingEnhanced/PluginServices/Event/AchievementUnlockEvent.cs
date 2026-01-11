@@ -4,6 +4,7 @@ using FFXIVClientStructs.FFXIV.Client.Game.Character;
 using FFXIVClientStructs.FFXIV.Component.Text;
 using FFXIVClientStructs.STD;
 using Lumina.Excel.Sheets;
+using SteamRecordingEnhanced.PluginServices.Event.Metadata;
 using SteamRecordingEnhanced.Utility;
 
 namespace SteamRecordingEnhanced.PluginServices.Event;
@@ -39,7 +40,7 @@ public unsafe class AchievementUnlockEvent : AbstractEvent
                 achievementName = achievementRow.Name.ToString();
             }
 
-            Services.TimelineService.AddEvent("Achievement unlocked", $"{achievementName}", Services.Configuration.AchievementUnlockedIcon, EventPriorities.ACHIEVEMENT_UNLOCKED_PRIORITY);
+            Services.TimelineService.AddEvent("Achievement unlocked", $"{achievementName}", GameEvent.AchievementUnlocked);
         }
 
         addLogMessageHook.Original(raptureLogModule, logMessageRowId, character, logParameters);

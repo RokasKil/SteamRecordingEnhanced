@@ -1,6 +1,7 @@
 ﻿using System.Linq;
 using Dalamud.Hooking;
 using FFXIVClientStructs.FFXIV.Client.Game.Character;
+using SteamRecordingEnhanced.PluginServices.Event.Metadata;
 using SteamRecordingEnhanced.Utility;
 
 namespace SteamRecordingEnhanced.PluginServices.Event;
@@ -27,11 +28,11 @@ public class DeathEvent : AbstractEvent
         {
             if (character->ContentId == Services.PlayerState.ContentId)
             {
-                Services.TimelineService.AddEvent("You died", MakeDescriptionString(character), Services.Configuration.PlayerDiedIcon, EventPriorities.PLAYER_DIED_PRIORITY);
+                Services.TimelineService.AddEvent("You died", MakeDescriptionString(character), GameEvent.PlayerDied);
             }
             else if (Services.PartyList.Any(partyMember => partyMember.ContentId == (long)character->ContentId))
             {
-                Services.TimelineService.AddEvent("Party member died", MakeDescriptionString(character), Services.Configuration.PartyMemberDiedIcon, EventPriorities.PARTY_MEMBER_DIED_PRIORITY);
+                Services.TimelineService.AddEvent("Party member died", MakeDescriptionString(character), GameEvent.PartyMemberDied);
             }
         }
     }

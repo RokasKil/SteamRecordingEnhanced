@@ -1,4 +1,5 @@
 ﻿using Dalamud.Game.ClientState.Conditions;
+using SteamRecordingEnhanced.PluginServices.Event.Metadata;
 using SteamRecordingEnhanced.Utility;
 
 namespace SteamRecordingEnhanced.PluginServices.Event;
@@ -16,7 +17,7 @@ public class TerritoryChangeEvent : AbstractEvent
 
     private void TerritoryChanged(ushort territoryTypeId)
     {
-        Services.TimelineService.AddEvent("Territory changed", Utils.GetTerritoryName(territoryTypeId), Services.Configuration.TerritoryChangedIcon, EventPriorities.TERRITORY_CHANGED_PRIORITY);
+        Services.TimelineService.AddEvent("Territory changed", Utils.GetTerritoryName(territoryTypeId), GameEvent.TerritoryChanged);
         StartPhase();
     }
 

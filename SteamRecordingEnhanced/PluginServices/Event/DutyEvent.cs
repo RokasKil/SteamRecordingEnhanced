@@ -1,4 +1,5 @@
-﻿using SteamRecordingEnhanced.Utility;
+﻿using SteamRecordingEnhanced.PluginServices.Event.Metadata;
+using SteamRecordingEnhanced.Utility;
 
 namespace SteamRecordingEnhanced.PluginServices.Event;
 
@@ -13,17 +14,17 @@ public class DutyEvent : AbstractEvent
 
     private void DutyStarted(object? sender, ushort territoryTypeId)
     {
-        Services.TimelineService.AddEvent("Duty started", Utils.GetContentOrTerritoryName(territoryTypeId), Services.Configuration.DutyStartedIcon, EventPriorities.DUTY_STARTED_PRIORITY);
+        Services.TimelineService.AddEvent("Duty started", Utils.GetContentOrTerritoryName(territoryTypeId), GameEvent.DutyStarted);
     }
 
     private void DutyCompleted(object? sender, ushort territoryTypeId)
     {
-        Services.TimelineService.AddEvent("Duty completed", Utils.GetContentOrTerritoryName(territoryTypeId), Services.Configuration.DutyCompleteIcon, EventPriorities.DUTY_COMPLETE_PRIORITY);
+        Services.TimelineService.AddEvent("Duty completed", Utils.GetContentOrTerritoryName(territoryTypeId), GameEvent.DutyComplete);
     }
 
     private void DutyWiped(object? sender, ushort territoryTypeId)
     {
-        Services.TimelineService.AddEvent("Duty wiped", Utils.GetContentOrTerritoryName(territoryTypeId), Services.Configuration.DutyWipedIcon, EventPriorities.DUTY_WIPED_PRIORITY);
+        Services.TimelineService.AddEvent("Duty wiped", Utils.GetContentOrTerritoryName(territoryTypeId), GameEvent.DutyWiped);
     }
 
     public override void Dispose()

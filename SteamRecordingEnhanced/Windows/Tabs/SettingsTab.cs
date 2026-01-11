@@ -1,6 +1,8 @@
 using Dalamud.Bindings.ImGui;
+using Dalamud.Interface;
 using Dalamud.Interface.Components;
 using Dalamud.Interface.Utility.Raii;
+using SteamRecordingEnhanced.PluginServices.Event.Metadata;
 using SteamRecordingEnhanced.Utility;
 
 namespace SteamRecordingEnhanced.Windows.Tabs;
@@ -12,24 +14,17 @@ internal class SettingsTab : ITab
     public void Draw()
     {
         ImGui.TextUnformatted("Event icons");
-        SettingsSteamIconSelect($"Level up", ref Services.Configuration.LevelUpIcon);
-        ImGuiComponents.HelpMarker("Works with Eureka and Occult Crescent leveling systems.");
-        SettingsSteamIconSelect($"Quest completed", ref Services.Configuration.QuestCompleteIcon);
-        SettingsSteamIconSelect($"Achievement unlocked", ref Services.Configuration.AchievementUnlockedIcon);
-        SettingsSteamIconSelect($"Fate completed", ref Services.Configuration.FateCompleteIcon);
-        ImGuiComponents.HelpMarker("Works with Eureka, Bozja and Occult Crescent fates and critical engagements.");
-        SettingsSteamIconSelect($"Territory changed", ref Services.Configuration.TerritoryChangedIcon);
-        SettingsSteamIconSelect($"Duty started", ref Services.Configuration.DutyStartedIcon);
-        SettingsSteamIconSelect($"Duty wiped", ref Services.Configuration.DutyWipedIcon);
-        SettingsSteamIconSelect($"Duty completed", ref Services.Configuration.DutyCompleteIcon);
-        SettingsSteamIconSelect($"Player died", ref Services.Configuration.PlayerDiedIcon);
-        SettingsSteamIconSelect($"Party member died", ref Services.Configuration.PartyMemberDiedIcon);
-        SettingsSteamIconSelect($"PVP kill", ref Services.Configuration.PvpKillIcon);
-        ImGuiComponents.HelpMarker("Works by reading the combat log which is known to not be 100% accurate" +
-                                   " but it will works most of the time.");
-
+        ImGuiComponents.HelpMarker("These are icons that will be placed on your recording timeline." +
+                                   " In cases where multiple events happen close to each other" +
+                                   " (for example Quest completed and Level up) events higher on the list" +
+                                   " will be displayed on top and you'll need to zoom in to see the other events," +
+                                   " use the arrows to reorder them to your liking." +
+                                   "\nIf you want to disable an event just set it's marker to None.");
+        DrawGameEventList();
         ImGui.Separator();
-        ImGui.TextUnformatted("Highlighted events");
+        ImGui.TextUnformatted("Highlighted timeline events");
+        ImGuiComponents.HelpMarker("These are events that have a start and an end, that range will be" +
+                                   " highlighted with a yellow line in your timeline.");
         SettingCheckbox("Combat", ref Services.Configuration.HighlightCombat);
 
         ImGui.Separator();
@@ -57,6 +52,66 @@ internal class SettingsTab : ITab
                 using (ImRaii.Enabled())
                     ImGui.SetTooltip("Steam Overlay must be enabled!");
             }
+        }
+    }
+
+    private void DrawGameEventList()
+    {
+        var changed = false;
+        int? indexToShift = null;
+        int offset = 0;
+        for (int i = Services.Configuration.GameEventPriorityList.Count - 1; i >= 0; i--)
+        {
+            using var id = ImRaii.PushId(i);
+            using (ImRaii.PushFont(UiBuilder.IconFont))
+            {
+                using (ImRaii.Disabled(i == Services.Configuration.GameEventPriorityList.Count - 1))
+                {
+                    if (ImGui.Button(FontAwesomeIcon.AngleUp.ToIconString()))
+                    {
+                        indexToShift = i;
+                        offset = 1;
+                    }
+                }
+
+                ImGui.SameLine();
+                using (ImRaii.Disabled(i == 0))
+                {
+                    if (ImGui.Button(FontAwesomeIcon.AngleDown.ToIconString()))
+                    {
+                        indexToShift = i;
+                        offset = -1;
+                    }
+                }
+
+                ImGui.SameLine();
+            }
+
+            var gameEvent = Services.Configuration.GameEventPriorityList[i];
+            var icon = Services.Configuration.GameEventIconMap[gameEvent];
+            if (GuiUtils.SteamIconSelect(gameEvent.GetLabel(), ref icon))
+            {
+                Services.Configuration.GameEventIconMap[gameEvent] = icon;
+                changed = true;
+            }
+
+            if (gameEvent.GetDescription() is { } description)
+            {
+                ImGuiComponents.HelpMarker(description);
+            }
+        }
+
+        if (indexToShift != null)
+        {
+            var gameEvent = Services.Configuration.GameEventPriorityList[indexToShift.Value];
+            Services.Configuration.GameEventPriorityList.RemoveAt(indexToShift.Value);
+            Services.Configuration.GameEventPriorityList.Insert(indexToShift.Value + offset, gameEvent);
+            changed = true;
+        }
+
+        if (changed)
+        {
+            Services.Configuration.Save();
         }
     }
 

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using SteamRecordingEnhanced.PluginServices.Event.Metadata;
 using SteamRecordingEnhanced.Steam;
 using SteamRecordingEnhanced.Utility;
 
@@ -12,6 +13,13 @@ public unsafe class TimelineService : AbstractService
     public TimelineGameMode CurrentGameMode { get; private set; } = TimelineGameMode.Invalid;
     private readonly SortedSet<DateTime> eventDates = [];
 
+
+    public void AddEvent(string title, string description, GameEvent gameEvent, float desiredOffset = 0f)
+    {
+        AddEvent(title, description, Services.Configuration.GameEventIconMap[gameEvent],
+            (uint)Services.Configuration.GameEventPriorityList.IndexOf(gameEvent),
+            desiredOffset);
+    }
 
     public void AddEvent(string title, string description, string icon, uint priority = 0, float desiredOffset = 0f)
     {

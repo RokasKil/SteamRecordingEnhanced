@@ -1,6 +1,7 @@
 ﻿using System;
 using Dalamud.Hooking;
 using Lumina.Excel.Sheets;
+using SteamRecordingEnhanced.PluginServices.Event.Metadata;
 using SteamRecordingEnhanced.Utility;
 
 namespace SteamRecordingEnhanced.PluginServices.Event;
@@ -31,7 +32,7 @@ public unsafe class QuestCompleteEvent : AbstractEvent
                 questName = questRow.Name.ToString();
             }
 
-            Services.TimelineService.AddEvent("Quest completed", questName, Services.Configuration.QuestCompleteIcon, EventPriorities.QUEST_COMPLETE_PRIORITY);
+            Services.TimelineService.AddEvent("Quest completed", questName, GameEvent.QuestComplete);
         }
 
         eventFrameworkAddLogHook.Original(eventFrameworkPtr, logMessageRowId, logData, logDataLength);

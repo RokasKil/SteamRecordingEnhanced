@@ -1,6 +1,7 @@
 ﻿using System;
 using Dalamud.Hooking;
 using FFXIVClientStructs.FFXIV.Client.Game.Character;
+using SteamRecordingEnhanced.PluginServices.Event.Metadata;
 using SteamRecordingEnhanced.Utility;
 
 namespace SteamRecordingEnhanced.PluginServices.Event;
@@ -69,6 +70,6 @@ public unsafe class LevelUpEvent : AbstractEvent
             return;
         }
 
-        Services.TimelineService.AddEvent(title, description, Services.Configuration.LevelUpIcon, EventPriorities.LEVEL_UP_PRIORITY);
+        Services.TimelineService.AddEvent(title, description, GameEvent.LevelUp);
     }
 }

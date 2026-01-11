@@ -2,6 +2,7 @@
 using Dalamud.Game.Addon.Lifecycle;
 using Dalamud.Game.Addon.Lifecycle.AddonArgTypes;
 using Dalamud.Game.NativeWrapper;
+using SteamRecordingEnhanced.PluginServices.Event.Metadata;
 using SteamRecordingEnhanced.Utility;
 
 namespace SteamRecordingEnhanced.PluginServices.Event;
@@ -37,7 +38,7 @@ public class FateEvent : AbstractEvent
         var iconId = (int)iconValue.GetValue()!;
         var title = CriticalEngagementIcons.Contains(iconId) ? "Critical Engagement completed" : "Fate completed";
         var description = $"{nameValue.GetValue()}";
-        Services.TimelineService.AddEvent(title, description, Services.Configuration.FateCompleteIcon, EventPriorities.FATE_COMPLETE_PRIORITY);
+        Services.TimelineService.AddEvent(title, description, GameEvent.FateComplete);
     }
 
     public override void Dispose()

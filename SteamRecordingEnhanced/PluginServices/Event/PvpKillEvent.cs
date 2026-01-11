@@ -3,6 +3,7 @@ using Dalamud.Hooking;
 using FFXIVClientStructs.FFXIV.Client.Game.Character;
 using FFXIVClientStructs.FFXIV.Client.Game.Object;
 using Lumina.Excel.Sheets;
+using SteamRecordingEnhanced.PluginServices.Event.Metadata;
 using SteamRecordingEnhanced.Utility;
 
 namespace SteamRecordingEnhanced.PluginServices.Event;
@@ -39,7 +40,7 @@ public unsafe class PvpKillEvent : AbstractEvent
             )
            )
         {
-            Services.TimelineService.AddEvent("Player killed", $"You killed {GetName(target)}!", Services.Configuration.PvpKillIcon, EventPriorities.PVP_KILL_PRIORITY, -2);
+            Services.TimelineService.AddEvent("Player killed", $"You killed {GetName(target)}!", GameEvent.PvpKill, -2);
         }
 
         addActionLogMessageHook.Original(logMessageRowId, source, target, unk4, unk5, unk6, unk7, unk8, unk9, unk10);

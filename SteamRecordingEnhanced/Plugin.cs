@@ -1,7 +1,7 @@
 ﻿using Dalamud.Game.Command;
 using Dalamud.Interface.Windowing;
 using Dalamud.Plugin;
-using SteamRecordingEnhanced.PluginServices.Event;
+using Dalamud.Utility;
 using SteamRecordingEnhanced.Utility;
 using SteamRecordingEnhanced.Windows;
 
@@ -35,7 +35,7 @@ public sealed class Plugin : IDalamudPlugin
         });
         Services.CommandManager.AddHandler(EventCommandName, new CommandInfo(OnEventCommand)
         {
-            HelpMessage = "Manually place an event on the recording timeline. /steamrecevent [event title]"
+            HelpMessage = $"Manually place an event on the recording timeline. {EventCommandName} [event title]"
         });
 
         Services.PluginInterface.UiBuilder.Draw += WindowSystem.Draw;
@@ -64,7 +64,13 @@ public sealed class Plugin : IDalamudPlugin
 
     private void OnEventCommand(string command, string args)
     {
-        Services.TimelineService.AddEvent(args, "", "steam_marker", EventPriorities.USER_EVENT_PRIORITY);
+        if (args.IsNullOrWhitespace())
+        {
+            Services.ChatGui.PrintError($"Event must have a title. {EventCommandName} [event title]");
+            return;
+        }
+
+        Services.TimelineService.AddEvent(args, "", "steam_marker", (uint)Services.Configuration.GameEventPriorityList.Count);
     }
 
     public void ToggleConfigUi()
