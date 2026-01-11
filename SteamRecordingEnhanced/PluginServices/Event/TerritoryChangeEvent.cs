@@ -24,7 +24,7 @@ public class TerritoryChangeEvent : AbstractEvent
     {
         Services.TimelineService.EndGamePhase();
 
-        string territory = Utils.GetTerritoryName(Services.ClientState.TerritoryType);
+        string territory = Utils.GetContentOrTerritoryName(Services.ClientState.TerritoryType);
 
         // Timeline tooltip
         Services.TimelineService.SetTimelineTooltip(territory);

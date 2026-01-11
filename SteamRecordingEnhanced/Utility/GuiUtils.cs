@@ -41,11 +41,7 @@ public static class GuiUtils
         using var id = ImRaii.PushId(title);
         bool changed = false;
         string displayValue = value.StartsWith("steam_") ? value["steam_".Length..] : value;
-        if (displayValue.Length > 0)
-        {
-            displayValue = string.Concat(displayValue[0].ToString().ToUpper(), displayValue.AsSpan(1));
-        }
-
+        displayValue = displayValue.Capitalize();
         if (displayValue == "")
         {
             displayValue = "None";

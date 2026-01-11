@@ -1,5 +1,7 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using Dalamud.Game.Text;
+using Dalamud.Utility;
 using Lumina.Excel.Sheets;
 using SteamRecordingEnhanced.Steam;
 
@@ -20,13 +22,28 @@ public static class Utils
         return territory;
     }
 
+    public static string? GetContentName(ushort territoryTypeId)
+    {
+        if (Services.DataManager.GetExcelSheet<TerritoryType>().TryGetRow(territoryTypeId, out var territoryRow)
+            && territoryRow.ContentFinderCondition.IsValid
+            && territoryRow.ContentFinderCondition.RowId != 0)
+        {
+            var contentName = territoryRow.ContentFinderCondition.Value.Name.ToString().Capitalize();
+            // Saw some empty names in the sheet, don't know on what duties they reference to but  in that case just
+            // return null so the code can fallback to territory name
+            return contentName.IsNullOrWhitespace() ? null : contentName;
+        }
+
+        return null;
+    }
+
+    public static string GetContentOrTerritoryName(ushort territoryTypeId) => GetContentName(territoryTypeId) ?? GetTerritoryName(territoryTypeId);
+
     public static string GetJobName(uint jobId)
     {
         var jobName = $"UNKNOWN_JOB_{jobId}";
         if (Services.DataManager.GetExcelSheet<ClassJob>().TryGetRow(jobId, out var classJobRow))
-        {
             jobName = classJobRow.NameEnglish.ToString();
-        }
 
         return jobName;
     }
@@ -35,9 +52,7 @@ public static class Utils
     {
         var jobName = $"UNKNOWN_PHANTOM_JOB_{jobId}";
         if (Services.DataManager.GetExcelSheet<MKDSupportJob>().TryGetRow(jobId, out var mkdSupportJobRow))
-        {
             jobName = mkdSupportJobRow.NameEnglish.ToString();
-        }
 
         return jobName;
     }
@@ -46,9 +61,7 @@ public static class Utils
     {
         var jobName = $"UNKNOWN_JOB_Abbreviation_{jobId}";
         if (Services.DataManager.GetExcelSheet<ClassJob>().TryGetRow(jobId, out var classJobRow))
-        {
             jobName = classJobRow.Abbreviation.ToString();
-        }
 
         return jobName;
     }
@@ -67,7 +80,13 @@ public static class Utils
     // so we just remove them
     public static string ClearSeQuestIcons(string input)
     {
-        return input.Replace(SeIconChar.QuestRepeatable.ToIconString(), "")
+        return input
+            .Replace(SeIconChar.QuestRepeatable.ToIconString(), "")
             .Replace(SeIconChar.QuestSync.ToIconString(), "");
+    }
+
+    public static string Capitalize(this string input)
+    {
+        return input.Length > 0 ? string.Concat(input[0].ToString().ToUpper(), input.AsSpan(1)) : input;
     }
 }
