@@ -76,13 +76,13 @@ public unsafe class TimelineService : AbstractService
         return null;
     }
 
-    public void EndEvent(ulong eventHandle)
+    public void EndEvent(ulong eventHandle, float offset = 0f)
     {
         var timeline = Services.SteamService.GetSteamTimeline();
         if (timeline != null)
         {
-            Services.Log.Debug($"Ending event {eventHandle}");
-            timeline->EndRangeTimelineEvent(eventHandle);
+            Services.Log.Debug($"Ending event {eventHandle} {offset}");
+            timeline->EndRangeTimelineEvent(eventHandle, offset);
         }
     }
 
