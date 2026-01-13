@@ -3,7 +3,7 @@
     "Author": "Speedas",
     "Name": "Steam Recording Enhanced",
     "InternalName": "SteamRecordingEnhanced",
-    "AssemblyVersion": "0.1.2.0",
+    "AssemblyVersion": "0.1.2.1",
     "Description": "Enhance Steam Game Recording by automatically adding configurable in-game events to the timeline, allowing for easy rewinding and clipping. Rewind to the moment of your death to reassure yourself that you did dodge the AOE before it went off and that the game does hate you personally with greater efficiency than ever!\r\n\r\nNon-steam users will have to follow a setup guide located in the configuration's window Status tab to get everything working.",
     "ApplicableVersion": "any",
     "RepoUrl": "https://github.com/RokasKil/SteamRecordingEnhanced",
@@ -19,9 +19,9 @@
     "LoadPriority": 0,
     "Punchline": "Add various in-game events to your Steam Game Recording timeline, comes with instructions for non-steam users!",
     "AcceptsFeedback": true,
-    "DownloadLinkInstall": "https://github.com/RokasKil/SteamRecordingEnhanced/releases/download/v0.1.2.0/latest.zip",
-    "DownloadLinkUpdate": "https://github.com/RokasKil/SteamRecordingEnhanced/releases/download/v0.1.2.0/latest.zip",
-    "IconUrl": "https://raw.githubusercontent.com/RokasKil/SteamRecordingEnhanced/refs/tags/v0.1.2.0/icon/icon_128px.png",
+    "DownloadLinkInstall": "https://github.com/RokasKil/SteamRecordingEnhanced/releases/download/v0.1.2.1/latest.zip",
+    "DownloadLinkUpdate": "https://github.com/RokasKil/SteamRecordingEnhanced/releases/download/v0.1.2.1/latest.zip",
+    "IconUrl": "https://raw.githubusercontent.com/RokasKil/SteamRecordingEnhanced/refs/tags/v0.1.2.1/icon/icon_128px.png",
     "DownloadCount": "0"
   }
 ]
