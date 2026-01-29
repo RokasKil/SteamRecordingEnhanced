@@ -14,9 +14,7 @@ public static class Utils
         var territory = $"UNKNOWN_TERRITORY_{territoryTypeId}";
         if (Services.DataManager.GetExcelSheet<TerritoryType>().TryGetRow(territoryTypeId, out var territoryRow))
         {
-            var region = territoryRow.PlaceNameRegion.Value.Name;
-            territory = region != "" ? $"{region} > " : "";
-            territory += territoryRow.PlaceName.Value.Name.ToString();
+            territory = territoryRow.PlaceName.Value.Name.ToString();
         }
 
         return territory;
