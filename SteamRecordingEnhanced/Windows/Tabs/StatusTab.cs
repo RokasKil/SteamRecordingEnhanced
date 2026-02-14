@@ -28,7 +28,7 @@ public class StatusTab : ITab
     public void Draw()
     {
         using var textWrapPos = ImRaii.TextWrapPos(ImGui.GetFontSize() * 28);
-        if ((Util.IsWine() || true) && ImGui.CollapsingHeader("Hey, wine enjoyer!"))
+        if (Util.IsWine() && ImGui.CollapsingHeader("Hey, wine enjoyer!"))
         {
             ImGui.TextWrapped("Currently this plugin is not supported on wine." +
                               " I'm hoping to get it sorted out in the future, but if you do manage to get it running," +
