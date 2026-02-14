@@ -32,21 +32,21 @@ public class DebugWindow : Window
 
     public override unsafe void Draw()
     {
-        ImGui.TextUnformatted($"Steam handle by framework {Framework.Instance()->SteamApiLibraryHandle:X}");
-        ImGui.TextUnformatted($"CurrentContentFinderConditionId {GameMain.Instance()->CurrentContentFinderConditionId:X}");
-        ImGui.TextUnformatted($"ShouldShowName {PvpKillEvent.ShouldShowName()}");
+        ImGui.Text($"Steam handle by framework {Framework.Instance()->SteamApiLibraryHandle:X}");
+        ImGui.Text($"CurrentContentFinderConditionId {GameMain.Instance()->CurrentContentFinderConditionId:X}");
+        ImGui.Text($"ShouldShowName {PvpKillEvent.ShouldShowName()}");
 
         if (!Services.SteamService.SteamLoaded)
         {
             using var color = ImRaii.PushColor(ImGuiCol.Text, new Vector4(1f, 0, 0, 1f));
-            ImGui.TextUnformatted("Steam not loaded");
+            ImGui.Text("Steam not loaded");
             return;
         }
 
         using (ImRaii.PushColor(ImGuiCol.Text, new Vector4(0, 1f, 0, 1f)))
-            ImGui.TextUnformatted("Steam loaded");
+            ImGui.Text("Steam loaded");
         var timeline = Services.SteamService.GetSteamTimeline();
-        ImGui.TextUnformatted($"Steam timeline: {(IntPtr)timeline:X}");
+        ImGui.Text($"Steam timeline: {(IntPtr)timeline:X}");
         if (timeline != null)
         {
             ImGui.Separator();
@@ -127,7 +127,7 @@ public class DebugWindow : Window
         ImGui.InputFloat("OffsetSeconds", ref offsetSeconds);
         GuiUtils.Combo("PossibleClip", ref possibleClip);
         ImGui.InputULong("eventHandle", ref eventHandle);
-        ImGui.TextUnformatted($"EventRecordingExistsCallback: {eventRecordingExistsCallback}");
+        ImGui.Text($"EventRecordingExistsCallback: {eventRecordingExistsCallback}");
         ImGui.InputFloat("Duration", ref duration);
         ImGui.InputFloat("OffsetSecondsInterval", ref offsetSecondsInterval);
         ImGui.InputUInt("EventCount", ref eventCount);
@@ -202,7 +202,7 @@ public class DebugWindow : Window
         ImGui.InputText("AttributeGroup", ref attributeGroup);
         ImGui.InputText("AttributeValue", ref attributeValue);
         ImGui.InputUInt("Priority", ref priority);
-        ImGui.TextUnformatted($"gamePhaseExistsCallback: {gamePhaseExistsCallback}");
+        ImGui.Text($"gamePhaseExistsCallback: {gamePhaseExistsCallback}");
         if (ImGui.Button("StartGamePhase"))
         {
             timeline->StartGamePhase();

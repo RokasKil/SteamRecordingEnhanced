@@ -1,10 +1,8 @@
 ﻿using System;
-using System.Diagnostics;
 using System.IO;
 using System.Numerics;
 using Dalamud.Bindings.ImGui;
 using Dalamud.Interface;
-using Dalamud.Interface.ImGuiNotification;
 using Dalamud.Interface.Utility.Raii;
 using Dalamud.Utility;
 using SteamRecordingEnhanced.Utility;
@@ -35,7 +33,7 @@ public class StatusTab : ITab
                               " please share some feedback on what you did and what OS you are running!");
         }
 
-        ImGui.TextUnformatted("Steam loaded:");
+        ImGui.Text("Steam loaded:");
         ImGui.SameLine();
         if (Services.SteamService.SteamLoaded)
         {
@@ -48,7 +46,7 @@ public class StatusTab : ITab
             return;
         }
 
-        ImGui.TextUnformatted("Overlay enabled:");
+        ImGui.Text("Overlay enabled:");
         ImGui.SameLine();
         var overlayEnabled = Services.SteamService.IsOverlayEnabled();
         if (overlayEnabled.HasValue && overlayEnabled.Value)
@@ -77,19 +75,19 @@ public class StatusTab : ITab
     private void DrawOk()
     {
         using var color = ImRaii.PushColor(ImGuiCol.Text, new Vector4(0, 1, 0, 1));
-        ImGui.TextUnformatted("Ok");
+        ImGui.Text("Ok");
         ImGui.SameLine();
         using var font = ImRaii.PushFont(UiBuilder.IconFont);
-        ImGui.TextUnformatted(FontAwesomeIcon.Check.ToIconString());
+        ImGui.Text(FontAwesomeIcon.Check.ToIconString());
     }
 
     private void DrawFail()
     {
         using var color = ImRaii.PushColor(ImGuiCol.Text, new Vector4(1, 0, 0, 1));
-        ImGui.TextUnformatted("Fail");
+        ImGui.Text("Fail");
         ImGui.SameLine();
         using var font = ImRaii.PushFont(UiBuilder.IconFont);
-        ImGui.TextUnformatted(FontAwesomeIcon.Times.ToIconString());
+        ImGui.Text(FontAwesomeIcon.Times.ToIconString());
     }
 
     private void DrawSteamInstructions()
@@ -106,7 +104,7 @@ public class StatusTab : ITab
 
                 if (ImGui.Button("Take me to the steam store page"))
                 {
-                    OpenSteamLink($"steam://store/{FfxivDemoSteamAppId}");
+                    Util.OpenLink($"steam://store/{FfxivDemoSteamAppId}");
                 }
             }
 
@@ -116,7 +114,7 @@ public class StatusTab : ITab
                                   " right click the game in your library and open Properties or just click the button below.");
                 if (ImGui.Button("Open Properties"))
                 {
-                    OpenSteamLink($"steam://gameproperties/{FfxivDemoSteamAppId}");
+                    Util.OpenLink($"steam://gameproperties/{FfxivDemoSteamAppId}");
                 }
             }
 
@@ -176,23 +174,6 @@ public class StatusTab : ITab
         catch (Exception)
         {
             // ignored
-        }
-    }
-
-    private void OpenSteamLink(string url)
-    {
-        try
-        {
-            Process.Start(new ProcessStartInfo() { FileName = url, UseShellExecute = true });
-        }
-        catch (Exception e)
-        {
-            Services.Log.Error(e, $"Failed to open steam url: {url}");
-            Services.NotificationManager.AddNotification(new()
-            {
-                Content = "Failed to open steam",
-                Type = NotificationType.Error
-            });
         }
     }
 }

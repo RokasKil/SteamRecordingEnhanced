@@ -13,7 +13,7 @@ internal class SettingsTab : ITab
 
     public void Draw()
     {
-        ImGui.TextUnformatted("Event icons");
+        ImGui.Text("Event icons");
         ImGuiComponents.HelpMarker("These are icons that will be placed on your recording timeline." +
                                    " In cases where multiple events happen close to each other" +
                                    " (for example Quest completed and Level up) events higher on the list" +
@@ -22,13 +22,13 @@ internal class SettingsTab : ITab
                                    "\nIf you want to disable an event just set it's marker to None.");
         DrawGameEventList();
         ImGui.Separator();
-        ImGui.TextUnformatted("Highlighted timeline events");
+        ImGui.Text("Highlighted timeline events");
         ImGuiComponents.HelpMarker("These are events that have a start and an end, that range will be" +
                                    " highlighted with a yellow line in your timeline.");
         SettingCheckbox("Combat", ref Services.Configuration.HighlightCombat);
 
         ImGui.Separator();
-        ImGui.TextUnformatted("Sessions");
+        ImGui.Text("Sessions");
         SettingCheckbox("Start sessions only in instances", ref Services.Configuration.SessionsOnlyInInstance);
         if (ImGui.CollapsingHeader("What are sessions?"))
         {

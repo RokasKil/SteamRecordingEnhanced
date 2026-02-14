@@ -58,7 +58,7 @@ public unsafe class PvpKillEvent : AbstractEvent
         }
     }
 
-    // Only show the name in the den in CC games
+    // Only show the name in the den and CC games
     public static bool ShouldShowName()
     {
         return Services.ClientState.TerritoryType == WolvesDenTerritoryId ||

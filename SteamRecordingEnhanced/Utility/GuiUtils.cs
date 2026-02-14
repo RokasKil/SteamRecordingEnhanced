@@ -80,7 +80,7 @@ public static class GuiUtils
                     return true;
                 }
 
-                foreach (SteamIcon enumValue in Enum.GetValues(typeof(SteamIcon)))
+                foreach (SteamIcon enumValue in Enum.GetValues<SteamIcon>())
                 {
                     var iconName = $"steam_{enumValue.ToString().ToLower()}";
                     using var buttonId = ImRaii.PushId(iconName);
@@ -142,7 +142,7 @@ public static class GuiUtils
             ImGui.SameLine();
         }
 
-        ImGui.TextUnformatted(title);
+        ImGui.Text(title);
 
 
         return changed;
