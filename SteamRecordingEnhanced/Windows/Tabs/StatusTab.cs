@@ -103,7 +103,7 @@ public class StatusTab : ITab
         {
             ImGui.TextWrapped("For this plugin to work you need to be running WINE with Isteamclient patches." +
                               " I personally got it working using XLM with XIVLauncher provided 10.8 WINE beta" +
-                              " on both steam and non-steam version of the game," +
+                              " on both steam and non-steam versions of the game," +
                               " the specific version to use might change as future updates come out.");
             ImGui.TextWrapped("Be warned that my personal knowledge on the topic is limited and so will be the support" +
                               " I can provide if something doesn't work on your setup.");
