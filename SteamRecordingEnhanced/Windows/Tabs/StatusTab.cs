@@ -18,6 +18,8 @@ public class StatusTab : ITab
 
     private string? launchOptionsLine;
 
+    private bool IsWine => Util.IsWine();
+
     public StatusTab()
     {
         CheckXivLauncherLocation();
@@ -26,13 +28,38 @@ public class StatusTab : ITab
     public void Draw()
     {
         using var textWrapPos = ImRaii.TextWrapPos(ImGui.GetFontSize() * 28);
-        if (Util.IsWine() && ImGui.CollapsingHeader("Hey, wine enjoyer!"))
+        DrawSteamStatus();
+        if (!Services.SteamService.SteamLoaded && !IsWine)
         {
-            ImGui.TextWrapped("Currently this plugin is not supported on wine." +
-                              " I'm hoping to get it sorted out in the future, but if you do manage to get it running," +
-                              " please share some feedback on what you did and what OS you are running!");
+            DrawWindowsSteamInstructions();
         }
+        
+        if (IsWine)
+        {
+            DrawWineDisclaimer();
+        }
+    }
 
+    private void DrawOk()
+    {
+        using var color = ImRaii.PushColor(ImGuiCol.Text, new Vector4(0, 1, 0, 1));
+        ImGui.Text("Ok");
+        ImGui.SameLine();
+        using var font = ImRaii.PushFont(UiBuilder.IconFont);
+        ImGui.Text(FontAwesomeIcon.Check.ToIconString());
+    }
+
+    private void DrawFail()
+    {
+        using var color = ImRaii.PushColor(ImGuiCol.Text, new Vector4(1, 0, 0, 1));
+        ImGui.Text("Fail");
+        ImGui.SameLine();
+        using var font = ImRaii.PushFont(UiBuilder.IconFont);
+        ImGui.Text(FontAwesomeIcon.Times.ToIconString());
+    }
+
+    private void DrawSteamStatus()
+    {
         ImGui.Text("Steam loaded:");
         ImGui.SameLine();
         if (Services.SteamService.SteamLoaded)
@@ -42,7 +69,6 @@ public class StatusTab : ITab
         else
         {
             DrawFail();
-            DrawSteamInstructions();
             return;
         }
 
@@ -68,29 +94,23 @@ public class StatusTab : ITab
                 return;
             }
         }
-
         ImGui.TextWrapped("Make sure the recording is running, I can't check that for you.");
     }
-
-    private void DrawOk()
+    
+    private void DrawWineDisclaimer()
     {
-        using var color = ImRaii.PushColor(ImGuiCol.Text, new Vector4(0, 1, 0, 1));
-        ImGui.Text("Ok");
-        ImGui.SameLine();
-        using var font = ImRaii.PushFont(UiBuilder.IconFont);
-        ImGui.Text(FontAwesomeIcon.Check.ToIconString());
+        if (ImGui.CollapsingHeader("Hey, wine enjoyer!"))
+        {
+            ImGui.TextWrapped("For this plugin to work you need to be running WINE with Isteamclient patches." +
+                              " I personally got it working using XLM with XIVLauncher provided 10.8 WINE beta" +
+                              " on both steam and non-steam version of the game," +
+                              " the specific version to use might change as future updates come out.");
+            ImGui.TextWrapped("Be warned that my personal knowledge on the topic is limited and so will be the support" +
+                              " I can provide if something doesn't work on your setup.");
+        }
     }
 
-    private void DrawFail()
-    {
-        using var color = ImRaii.PushColor(ImGuiCol.Text, new Vector4(1, 0, 0, 1));
-        ImGui.Text("Fail");
-        ImGui.SameLine();
-        using var font = ImRaii.PushFont(UiBuilder.IconFont);
-        ImGui.Text(FontAwesomeIcon.Times.ToIconString());
-    }
-
-    private void DrawSteamInstructions()
+    private void DrawWindowsSteamInstructions()
     {
         if (ImGui.CollapsingHeader("How to get this working on a non-steam copy of the game?"))
         {

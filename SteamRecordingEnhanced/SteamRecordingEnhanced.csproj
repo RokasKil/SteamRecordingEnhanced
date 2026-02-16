@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Project Sdk="Dalamud.NET.Sdk/14.0.1">
     <PropertyGroup>
-        <Version>0.1.2.5</Version>
+        <Version>0.1.2.6</Version>
     </PropertyGroup>
     <PropertyGroup>
         <InternalName>SteamRecordingEnhanced</InternalName>
@@ -12,8 +12,7 @@
         <Description>
             <![CDATA[Enhance Steam Game Recording by automatically adding configurable in-game events to the timeline, allowing for easy rewinding and clipping. Rewind to the moment of your death to reassure yourself that you did dodge the AOE before it went off and that the game does hate you personally with greater efficiency than ever!
 
-Non-steam users will have to follow a setup guide located in the configuration's window Status tab to get everything working.
-Wine users are not supported at this moment.]]>
+Non-steam users will have to follow a setup guide located in the configuration's window Status tab to get everything working.]]>
         </Description>
         <Tags>UI;steam;recording</Tags>
     </PropertyGroup>
