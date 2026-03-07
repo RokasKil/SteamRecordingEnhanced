@@ -43,6 +43,8 @@ public class Services
     public static IChatGui ChatGui { get; set; } = null!;
     [PluginService]
     public static IAddonLifecycle AddonLifecylce { get; set; } = null!;
+    [PluginService]
+    public static IUnlockState UnlockState { get; set; } = null!;
     public static IDalamudPluginInterface PluginInterface { get; set; } = null!;
     public static Configuration Configuration { get; set; } = null!;
     public static SteamService SteamService { get; set; } = null!;

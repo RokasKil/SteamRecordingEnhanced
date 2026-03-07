@@ -1,48 +1,21 @@
-﻿using System;
-using Dalamud.Hooking;
-using FFXIVClientStructs.FFXIV.Client.Game.Character;
-using FFXIVClientStructs.FFXIV.Component.Text;
-using FFXIVClientStructs.STD;
+﻿using Lumina.Excel;
 using Lumina.Excel.Sheets;
 using SteamRecordingEnhanced.PluginServices.Event.Metadata;
 using SteamRecordingEnhanced.Utility;
 
 namespace SteamRecordingEnhanced.PluginServices.Event;
 
-public unsafe class AchievementUnlockEvent : AbstractEvent
+public class AchievementUnlockEvent : AbstractEvent
 {
-    private const uint AchievementLogMessageRowId = 952;
-
-    private delegate void AddLogMessageDelegate(IntPtr raptureLogModule, uint logMessageRowId, Character* character, StdDeque<TextParameter>* logParameters);
-
-    private readonly Hook<AddLogMessageDelegate> addLogMessageHook;
-
     public AchievementUnlockEvent()
     {
-        addLogMessageHook = Hook<AddLogMessageDelegate>("E8 ?? ?? ?? ?? 49 3B FE 0F 85", AddLogMessageDetour);
-        EnableHooks();
+        Services.UnlockState.Unlock += OnUnlock;
     }
 
-    private void AddLogMessageDetour(IntPtr raptureLogModule, uint logMessageRowId, Character* character, StdDeque<TextParameter>* logParameters)
+    private void OnUnlock(RowRef rowRef)
     {
-        if (logMessageRowId == AchievementLogMessageRowId &&
-            character != null &&
-            Services.ObjectTable.LocalPlayer?.Address == (IntPtr)character &&
-            logParameters != null &&
-            logParameters->Count > 0 &&
-            (*logParameters)[0].Type == TextParameterType.Integer
-           )
-        {
-            var achievementId = (uint)(*logParameters)[0].IntValue;
-            var achievementName = $"UNKNOWN_ACHIEVEMENT_{achievementId}";
-            if (Services.DataManager.GetExcelSheet<Achievement>().TryGetRow(achievementId, out var achievementRow))
-            {
-                achievementName = achievementRow.Name.ToString();
-            }
-
-            Services.TimelineService.AddEvent("Achievement unlocked", $"{achievementName}", GameEvent.AchievementUnlocked);
-        }
-
-        addLogMessageHook.Original(raptureLogModule, logMessageRowId, character, logParameters);
+        if (!rowRef.TryGetValue<Achievement>(out var achievementRow)) return;
+        var achievementName = achievementRow.Name.ToString();
+        Services.TimelineService.AddEvent("Achievement unlocked", $"{achievementName}", GameEvent.AchievementUnlocked);
     }
 }

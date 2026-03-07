@@ -16,10 +16,10 @@ public enum GameEvent
     [GameEventMetadata("steam_attack", "Duty wiped")]
     DutyStarted,
     [GameEventMetadata("steam_effect", "Level up",
-        "Works with Eureka and Occult Crescent leveling systems.")]
+        "Works with leveling systems in field operations.")]
     LevelUp,
     [GameEventMetadata("steam_chest", "Fate completed",
-        "Works with Eureka, Bozja and Occult Crescent fates and critical engagements.")]
+        "Works with fates and critical engagements in field operations.")]
     FateComplete,
     [GameEventMetadata("steam_ribbon", "Quest completed")]
     QuestComplete,

@@ -1,12 +1,10 @@
-﻿using System;
-using Dalamud.Hooking;
-using FFXIVClientStructs.FFXIV.Client.Game.Character;
+﻿using Dalamud.Game.Chat;
 using SteamRecordingEnhanced.PluginServices.Event.Metadata;
 using SteamRecordingEnhanced.Utility;
 
 namespace SteamRecordingEnhanced.PluginServices.Event;
 
-public unsafe class LevelUpEvent : AbstractEvent
+public class LevelUpEvent : AbstractEvent
 {
     // Regular content
     private const uint LevelUpMessageId = 590;
@@ -14,62 +12,55 @@ public unsafe class LevelUpEvent : AbstractEvent
     // Eureka
     private const uint ElementalLevelUpMessageId = 9053;
     // Bozja
-    private const uint LevelUpResistanceRankMessageId = 9630;
+    private const uint ResistanceRankUpMessageId = 9630;
     //Crescent
     private const uint LevelUpKnowledgeMessageId = 10955;
     private const uint LevelUpPhantomJobMessageId = 10957;
 
-    private delegate void LevelLogMessageDelegate(uint messageId, Character* character, uint num1, uint num2, uint unk5, float unk6);
-
-    private readonly Hook<LevelLogMessageDelegate> levelLogMessageHook;
 
     public LevelUpEvent()
     {
-        levelLogMessageHook = Hook<LevelLogMessageDelegate>("E9 ?? ?? ?? ?? 45 88 83", LevelLogMessageDetour);
-        EnableHooks();
+        RegisterLogMessageEvent(OnLevelUpMessage, LevelUpMessageId, LevelUpOtherJobMessageId);
+        RegisterLogMessageEvent(OnElementalLevelUpMessage, ElementalLevelUpMessageId);
+        RegisterLogMessageEvent(OnResistanceRankUpMessage, ResistanceRankUpMessageId);
+        RegisterLogMessageEvent(OnKnowledgeLevelUpMessage, LevelUpKnowledgeMessageId);
+        RegisterLogMessageEvent(OnPhantomJobLevelUpMessage, LevelUpPhantomJobMessageId);
     }
 
-    private void LevelLogMessageDetour(uint messageId, Character* character, uint num1, uint num2, uint unk5, float unk6)
+    private void OnLevelUpMessage(ILogMessage message)
     {
-        levelLogMessageHook.Original(messageId, character, num1, num2, unk5, unk6);
-        if (character == null || (IntPtr)character != Services.ObjectTable.LocalPlayer?.Address)
-        {
-            return;
-        }
+        if (!message.SourceEntity.IsLocalPlayer()) return;
+        if (!message.TryGetIntParameterWithLog(0, out var jobIndex)) return;
+        if (!message.TryGetIntParameterWithLog(1, out var lvl)) return;
+        Services.TimelineService.AddEvent("Level up", $"{Utils.GetJobName((uint)jobIndex)} Lv. {lvl}", GameEvent.LevelUp);
+    }
 
-        string title;
-        string description;
-        if (messageId is LevelUpMessageId or LevelUpOtherJobMessageId)
-        {
-            title = "Level up";
-            description = $"{Utils.GetJobName(num1)} Lv. {num2}";
-        }
-        else if (messageId is ElementalLevelUpMessageId)
-        {
-            title = "Elemental level up";
-            description = $"Lv. {num1}";
-        }
-        // TODO: Bozja rank up doesn't work (I think, hard to test when already maxed rank and the instances are kinda dead)
-        else if (messageId is LevelUpResistanceRankMessageId)
-        {
-            title = "Resistance rank up";
-            description = $"Rank {num2}";
-        }
-        else if (messageId is LevelUpKnowledgeMessageId)
-        {
-            title = "Knowledge level up";
-            description = $"Lv. {num1}";
-        }
-        else if (messageId is LevelUpPhantomJobMessageId)
-        {
-            title = "Phantom Job level up";
-            description = $"{Utils.GetPhantomJobName(num1)} Lv. {num2}";
-        }
-        else
-        {
-            return;
-        }
+    private void OnElementalLevelUpMessage(ILogMessage message)
+    {
+        if (!message.SourceEntity.IsLocalPlayer()) return;
+        if (!message.TryGetIntParameter(0, out var lvl)) return;
+        Services.TimelineService.AddEvent("Elemental level up", $"Lv. {lvl}", GameEvent.LevelUp);
+    }
 
-        Services.TimelineService.AddEvent(title, description, GameEvent.LevelUp);
+    private void OnResistanceRankUpMessage(ILogMessage message)
+    {
+        if (!message.SourceEntity.IsLocalPlayer()) return;
+        if (!message.TryGetIntParameter(0, out var lvl)) return;
+        Services.TimelineService.AddEvent("Resistance rank up", $"Rank {lvl}", GameEvent.LevelUp);
+    }
+
+    private void OnKnowledgeLevelUpMessage(ILogMessage message)
+    {
+        if (!message.SourceEntity.IsLocalPlayer()) return;
+        if (!message.TryGetIntParameter(0, out var lvl)) return;
+        Services.TimelineService.AddEvent("Knowledge level up", $"Lv. {lvl}", GameEvent.LevelUp);
+    }
+
+    private void OnPhantomJobLevelUpMessage(ILogMessage message)
+    {
+        if (!message.SourceEntity.IsLocalPlayer()) return;
+        if (!message.TryGetIntParameterWithLog(0, out var jobIndex)) return;
+        if (!message.TryGetIntParameterWithLog(1, out var lvl)) return;
+        Services.TimelineService.AddEvent("Phantom Job level up", $"{Utils.GetPhantomJobName((uint)jobIndex)} Lv. {lvl}", GameEvent.LevelUp);
     }
 }
