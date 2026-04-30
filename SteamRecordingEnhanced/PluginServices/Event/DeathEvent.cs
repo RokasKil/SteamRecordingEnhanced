@@ -30,7 +30,7 @@ public class DeathEvent : AbstractEvent
             {
                 Services.TimelineService.AddEvent("You died", MakeDescriptionString(character), GameEvent.PlayerDied);
             }
-            else if (Services.PartyList.Any(partyMember => partyMember.ContentId == (long)character->ContentId))
+            else if (Services.PartyList.Any(partyMember => partyMember.ContentId == character->ContentId))
             {
                 Services.TimelineService.AddEvent("Party member died", MakeDescriptionString(character), GameEvent.PartyMemberDied);
             }

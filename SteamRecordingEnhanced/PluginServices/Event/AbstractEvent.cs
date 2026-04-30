@@ -37,7 +37,6 @@ public abstract class AbstractEvent : HookOwner
         Services.EventService.UnregisterLogMessageEvent(callback, messageIds);
     }
 
-
     public override void Dispose()
     {
         base.Dispose();

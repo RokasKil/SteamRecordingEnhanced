@@ -9,7 +9,7 @@ namespace SteamRecordingEnhanced.Utility;
 
 public static class Utils
 {
-    public static string GetTerritoryName(ushort territoryTypeId)
+    public static string GetTerritoryName(uint territoryTypeId)
     {
         var territory = $"UNKNOWN_TERRITORY_{territoryTypeId}";
         if (Services.DataManager.GetExcelSheet<TerritoryType>().TryGetRow(territoryTypeId, out var territoryRow))
@@ -20,7 +20,7 @@ public static class Utils
         return territory;
     }
 
-    public static string? GetContentName(ushort territoryTypeId)
+    public static string? GetContentName(uint territoryTypeId)
     {
         if (Services.DataManager.GetExcelSheet<TerritoryType>().TryGetRow(territoryTypeId, out var territoryRow)
             && territoryRow.ContentFinderCondition.IsValid
@@ -35,7 +35,7 @@ public static class Utils
         return null;
     }
 
-    public static string GetContentOrTerritoryName(ushort territoryTypeId) => GetContentName(territoryTypeId) ?? GetTerritoryName(territoryTypeId);
+    public static string GetContentOrTerritoryName(uint territoryTypeId) => GetContentName(territoryTypeId) ?? GetTerritoryName(territoryTypeId);
 
     public static string GetJobName(uint jobId)
     {

@@ -161,21 +161,19 @@ public static class GuiUtils
         return null;
     }
 
-    public static ImRaii.IEndObject Bullet()
+    public static ImRaii.IndentDisposable Bullet()
     {
         ImGui.Bullet();
-        var indent = ImRaii.PushIndent(ImGui.GetTreeNodeToLabelSpacing());
-        return new ImRaii.EndUnconditionally(() => indent.Dispose(), true);
+        return ImRaii.PushIndent(ImGui.GetTreeNodeToLabelSpacing());
     }
 
-    public static ImRaii.IEndObject PushFont(IFontHandle font, bool condition = true)
+    public static IDisposable PushFont(IFontHandle font, bool condition = true)
     {
         if (condition)
         {
-            var disposable = font.Push();
-            return new ImRaii.EndConditionally(() => disposable.Dispose(), true);
+            return font.Push();
         }
 
-        return ImRaii.IEndObject.Empty;
+        return EmptyDisposable.Instance;
     }
 }

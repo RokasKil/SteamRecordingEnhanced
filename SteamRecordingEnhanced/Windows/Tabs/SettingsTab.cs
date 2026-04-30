@@ -47,7 +47,7 @@ internal class SettingsTab : ITab
                 Services.TimelineService.OpenOverlayToGamePhase();
             }
 
-            if (ImGui.IsItemHovered(ImGuiHoveredFlags.AllowWhenDisabled) && disabled.Success)
+            if (ImGui.IsItemHovered(ImGuiHoveredFlags.AllowWhenDisabled) && disabled.Count != 0)
             {
                 using (ImRaii.Enabled())
                     ImGui.SetTooltip("Steam Overlay must be enabled!");

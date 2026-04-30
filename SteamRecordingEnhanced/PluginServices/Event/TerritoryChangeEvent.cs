@@ -15,7 +15,7 @@ public class TerritoryChangeEvent : AbstractEvent
         }
     }
 
-    private void TerritoryChanged(ushort territoryTypeId)
+    private void TerritoryChanged(uint territoryTypeId)
     {
         Services.TimelineService.AddEvent("Territory changed", Utils.GetTerritoryName(territoryTypeId), GameEvent.TerritoryChanged);
         StartPhase();
