@@ -62,15 +62,29 @@ public unsafe class TimelineService : AbstractService
         }
     }
 
-    public ulong? StartEvent(string title, string description, string icon)
+    public ulong? AddRangeEvent(string title, string description, string icon, float duration, float offset = 0f)
     {
         title = PrepareString(title)!;
         description = PrepareString(description)!;
         var timeline = Services.SteamService.GetSteamTimeline();
         if (timeline != null)
         {
-            Services.Log.Debug($"Starting event event {title} {description} {icon}");
-            return timeline->StartRangeTimelineEvent(title, description, icon);
+            Services.Log.Debug($"Adding range event {title} {description} {icon} {duration} {offset}");
+            return timeline->AddRangeTimelineEvent(title, description, icon, duration: duration, startOffsetSeconds: offset);
+        }
+
+        return null;
+    }
+
+    public ulong? StartEvent(string title, string description, string icon, float offset = 0f)
+    {
+        title = PrepareString(title)!;
+        description = PrepareString(description)!;
+        var timeline = Services.SteamService.GetSteamTimeline();
+        if (timeline != null)
+        {
+            Services.Log.Debug($"Starting range event {title} {description} {icon} {offset}");
+            return timeline->StartRangeTimelineEvent(title, description, icon, startOffsetSeconds: offset);
         }
 
         return null;

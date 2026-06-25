@@ -164,7 +164,7 @@ public unsafe struct SteamTimelineVTable
     public delegate* unmanaged <SteamTimeline*, ulong, void> OpenOverlayToTimelineEvent;
 }
 
-public enum TimelineGameMode
+public enum TimelineGameMode : int
 {
     Invalid = 0,
     Playing = 1,
@@ -174,7 +174,7 @@ public enum TimelineGameMode
     Max
 }
 
-public enum TimelineEventClipPriority
+public enum TimelineEventClipPriority : int
 {
     Invalid = 0,
     None = 1,

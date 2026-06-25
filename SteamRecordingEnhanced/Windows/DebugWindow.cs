@@ -68,6 +68,26 @@ public class DebugWindow : Window
 
             ImGui.Separator();
             DrawSeIconTest(timeline);
+            ImGui.Separator();
+            if (ImGui.Button("Test range spam"))
+            {
+                for (uint i = 0; i < 5; i++)
+                {
+                    var handle = Services.TimelineService.StartEvent(i.ToString(), i.ToString(), $"steam_{i}", i * 5);
+                    if (handle.HasValue)
+                    {
+                        Services.TimelineService.EndEvent(handle.Value, i * 5 + 4);
+                    }
+                }
+            }
+
+            if (ImGui.Button("Test range spam with add"))
+            {
+                for (uint i = 0; i < 5; i++)
+                {
+                    var handle = Services.TimelineService.AddRangeEvent(i.ToString(), i.ToString(), $"steam_{i}", 4, i * 5);
+                }
+            }
         }
     }
 
