@@ -11,9 +11,9 @@ public enum GameEvent
     PlayerDied,
     [GameEventMetadata("steam_chest", "Duty completed")]
     DutyComplete,
-    [GameEventMetadata("steam_x", "Duty started")]
+    [GameEventMetadata("steam_x", "Duty wiped")]
     DutyWiped,
-    [GameEventMetadata("steam_attack", "Duty wiped")]
+    [GameEventMetadata("steam_attack", "Duty started")]
     DutyStarted,
     [GameEventMetadata("steam_effect", "Level up",
         "Works with leveling systems in field operations.")]
