@@ -13,7 +13,7 @@ public class SteamService : AbstractService
     private delegate uint GetHSteamUserDelegate();
 
     [UnmanagedFunctionPointer(CallingConvention.StdCall)]
-    private delegate byte SteamApiInitDelegate();
+    private unsafe delegate byte SteamApiInitFlatDelegate(byte* pOutErrMsg);
 
     [UnmanagedFunctionPointer(CallingConvention.StdCall)]
     private delegate IntPtr FindOrCreateInterfaceDelegate(uint hSteamUser, [MarshalAs(UnmanagedType.LPUTF8Str)] string interfaceVersion);
@@ -23,7 +23,7 @@ public class SteamService : AbstractService
     private static extern IntPtr GetModuleHandle(string moduleName);
 
     private GetHSteamUserDelegate? getHSteamUser;
-    private SteamApiInitDelegate? steamApiInit;
+    private SteamApiInitFlatDelegate? steamApiInitFlat;
     private FindOrCreateInterfaceDelegate? findOrCreateInterface;
 
     public bool SteamLoaded { get; private set; } = false;
@@ -43,11 +43,14 @@ public class SteamService : AbstractService
                 Services.Log.Debug($"Got steam handle2 {steamHandle}");
             }
 
-            steamApiInit = Marshal.GetDelegateForFunctionPointer<SteamApiInitDelegate>(NativeLibrary.GetExport(steamHandle, "SteamAPI_Init"));
+            steamApiInitFlat = Marshal.GetDelegateForFunctionPointer<SteamApiInitFlatDelegate>(NativeLibrary.GetExport(steamHandle, "SteamAPI_InitFlat"));
             getHSteamUser = Marshal.GetDelegateForFunctionPointer<GetHSteamUserDelegate>(NativeLibrary.GetExport(steamHandle, "SteamAPI_GetHSteamUser"));
             findOrCreateInterface = Marshal.GetDelegateForFunctionPointer<FindOrCreateInterfaceDelegate>(NativeLibrary.GetExport(steamHandle, "SteamInternal_FindOrCreateUserInterface"));
+            unsafe
+            {
+                SteamLoaded = steamApiInitFlat(null) == 0;
+            }
 
-            SteamLoaded = steamApiInit() == 1;
             Services.Log.Information($"Steam api init {SteamLoaded}");
         }
         catch (Exception ex)
